@@ -4,7 +4,7 @@
     {
         public static mem<T> place<T>() where T : crocs_obj, new()
         {
-            return new T();
+            return new mem<T>(new T());
         }
 
         public static mem<T> place<T>(T obj) where T : crocs_obj

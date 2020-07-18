@@ -21,18 +21,24 @@ namespace crocs
             return memory.shallow_clone<T>(mem.obj);
         }
 
-        /// <summary>
-        /// copies an object to a memory block of that type
-        /// When would you use this? To return a structure by copy from a function.
-        /// </summary>
-        public static implicit operator mem<T>(T obj)
-        {
-            return new mem<T>(memory.shallow_clone<T>(obj));
-        }
+        //opt for explicit memory copies for now
+        ///// <summary>
+        ///// copies an object to a memory block of that type
+        ///// When would you use this? To return a structure by copy from a function.
+        ///// </summary>
+        //public static implicit operator mem<T>(T obj)
+        //{
+        //    return new mem<T>(memory.shallow_clone<T>(obj));
+        //}
     }
 
     public class memory
     {
+        public static mem<T> copy<T>(T source) where T: crocs_obj
+        {
+            return new mem<T>(source);
+        }
+
         public static void copy_to<T>(T destination, T source) where T : crocs_obj
         {
             destination._throw_if_destructed();

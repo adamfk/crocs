@@ -1,6 +1,8 @@
 using crocs;
 using Xunit;
 
+using static crocs.memory;
+
 namespace crocs_test
 {
 
@@ -15,7 +17,7 @@ namespace crocs_test
         {
             using Stereo s1 = stack_mem.place<Stereo>();
             using Stereo s2 = stack_mem.place(new Stereo());
-            return s1;
+            return copy(s1); //or memory.copy() for full
         }
 
         public Stereo build_stereo_bad(int volume)
