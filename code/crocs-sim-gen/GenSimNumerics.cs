@@ -327,7 +327,7 @@ namespace torc
                     {
                         binary = $"unchecked(({type.GetBackingTypeName()}){binary})";
                     }
-                    inner += tab + $"{{ {type.full_name} n = {value}; Assert.Equal<{type.memory_name}>({binary}, n.v); }}\n";
+                    inner += tab + $"{{ {type.full_name} n = {value}; Assert.Equal<{type.memory_name}>({binary}, n); }}\n";
                 }
 
                 if (type.is_signed)
@@ -458,16 +458,14 @@ namespace torc
             List<TypeInfo> smallerTypes = GetSmallerTypes(typeInfo);
 
             var wideningConversions = "";
-            var wideningConversionsRef = "";
 
             var asTypeConversions = ""; //needed for mixing signed and unsigned where the unsigned needs promoting
 
             var widenToTypes = GetWideningConversions(typeInfo);
             foreach (var widerType in widenToTypes)
             {
-                wideningConversions += $"        public static implicit operator {widerType.memory_name}({typeInfo.memory_name} num) {{ return num.read_value; }}\n";
-                wideningConversionsRef += $"        public static implicit operator {widerType.memory_name}({typeInfo.memory_name}r num) {{ return num.cp; }}\n";
-                asTypeConversions += $"\n        public {widerType.memory_name} as_{widerType.memory_name} => v;";
+                wideningConversions += $"        public static implicit operator {widerType.memory_name}({typeInfo.memory_name} num) {{ return num._value; }}\n";
+                asTypeConversions += $"\n        public {widerType.memory_name} as_{widerType.memory_name} => _value;";
             }
 
             var narrowingConversions = "";
@@ -482,7 +480,7 @@ namespace torc
                 narrowingConversions += $@"
         public {narrowTypeName} as_{narrowTypeName}_ort {{
             get {{
-                var vv = GetBackingValue(this);
+                var vv = _value;
                 decimal v = vv;
                 if (v > {narrowTypeName}.MAX || v < {narrowTypeName}.MIN)
                 {{
@@ -493,62 +491,48 @@ namespace torc
         }}
 ";
 
-                wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => unchecked(({narrowTypeInfo.GetBackingTypeName()})GetBackingValue(this));\n";
+                wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => unchecked(({narrowTypeInfo.GetBackingTypeName()})_value);\n";
             }
 
             var template = $@"
 //NOTE! AUTO GENERATED FILE
 using System;
+using crocs.lang;
 
 #pragma warning disable IDE1006 // Naming Styles
 
 namespace torc.lang
 {{
-    public struct {typeInfo.memory_name} : WiftObj
+    public struct {typeInfo.memory_name} : ICrocsObj
     {{
+        private bool _destructed;
+
         public const {backing_type} MAX = {typeInfo.GetMaxValue()};
         public const {backing_type} MIN = {typeInfo.GetMinValue()};
 
-        protected {backing_type} _value;
+        private {backing_type} _value;
 
-        private {typeInfo.memory_name}()
+        public {typeInfo.memory_name}({backing_type} value)
         {{
-        }}
-
-        private {typeInfo.memory_name}({backing_type} value)
-        {{
+            _destructed = false;
             _value = value;
         }}
 
-        private {backing_type} read_value => _value;
-
-        internal static {backing_type} GetBackingValue({typeInfo.memory_name} n) {{ return n.read_value; }}
-
-        public {typeInfo.memory_name} v
+        public void Dispose()
         {{
-            get
-            {{
-                ThrowIfDestructed();
-                return this.cp;
-            }}
+            _destructed = true;
+        }}
 
-            set
+        public void _throw_if_destructed()
+        {{
+            if (_destructed)
             {{
-                ThrowIfDestructed();
-                this._value = value._value;
+                throw new MemberAccessException();
             }}
         }}
 
-        public {typeInfo.memory_name}r r {{ get {{ return new {typeInfo.memory_name}r(this); }} }}
-
-        /// <summary>
-        /// creates a copy of {typeInfo.memory_name} memory. Useful for when passing to functions.
-        /// </summary>
-        public {typeInfo.memory_name} cp => new {typeInfo.memory_name}(read_value);
-
         public static implicit operator {typeInfo.memory_name}({backing_type} num) {{ return new {typeInfo.memory_name}(num); }}
-        public static implicit operator {backing_type}({typeInfo.memory_name} num) {{ return num.read_value; }}    //needed
-        //public static implicit operator {typeInfo.memory_name}r({typeInfo.memory_name} num) {{ return new {typeInfo.memory_name}r(num); }}
+        public static implicit operator {backing_type}({typeInfo.memory_name} num) {{ return num._value; }}
 
         {asTypeConversions}
 
@@ -566,12 +550,12 @@ namespace torc.lang
 
         public override string ToString()
         {{
-            return read_value.ToString();
+            return _value.ToString();
         }}
 
         public override int GetHashCode()
         {{
-            return v.GetHashCode();
+            return _value.GetHashCode();
         }}
 
         public override bool Equals(object obj)
@@ -592,14 +576,14 @@ namespace torc.lang
                 case uint   i: value = i; break;
                 case ulong  i: value = i; break;
 
-                case i8  i: value = i8.GetBackingValue(i);  break;
-                case i16 i: value = i16.GetBackingValue(i); break;
-                case i32 i: value = i32.GetBackingValue(i); break;
-                case i64 i: value = i64.GetBackingValue(i); break;
-                case u8  i: value = u8.GetBackingValue(i);  break;
-                case u16 i: value = u16.GetBackingValue(i); break;
-                case u32 i: value = u32.GetBackingValue(i); break;
-                case u64 i: value = u64.GetBackingValue(i); break;
+                case i8  i: value = i;  break;
+                case i16 i: value = i; break;
+                case i32 i: value = i; break;
+                case i64 i: value = i; break;
+                case u8  i: value = i;  break;
+                case u16 i: value = i; break;
+                case u32 i: value = i; break;
+                case u64 i: value = i; break;
 
                 default: return false;
             }}
@@ -632,7 +616,7 @@ namespace torc.lang
 
                 if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
                 {
-                    result += GenOverflowingOperator(classType, "IHas" + otherType.full_name.ToUpper(), resultType, op, otherValueGetter: $"{otherType.full_name}.GetBackingValue(({otherType.memory_name})b)");
+                    result += GenOverflowingOperator(classType, "IHas" + otherType.full_name.ToUpper(), resultType, op, otherValueGetter: $"b");
                 }
             }
 
@@ -661,12 +645,12 @@ namespace torc.lang
 
         private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = null)
         {
-            otherValueGetter = otherValueGetter ?? $"{otherTypeName}.GetBackingValue(b)";
+            otherValueGetter = otherValueGetter ?? $"b";
 
             var template = $@"
         public static {resultType.full_name} operator {op}({classType.full_name} a, {otherTypeName} b)
         {{
-            var value = {classType.full_name}.GetBackingValue(a) {op} {otherValueGetter};
+            var value = ({classType})a {op} ({otherTypeName}){otherValueGetter};
             {GenOverflowChecks(resultType)}
             {resultType.full_name} result = ({resultType.GetBackingTypeName()})value;
             return result;
@@ -679,7 +663,7 @@ namespace torc.lang
             var template = $@"
         public static {torc_type} operator {op}({torc_type} a, {torc_type} b)
         {{
-            var value = a.read_value {op} b.read_value;
+            var value = a {op} b;
             {overflowChecks}
             {torc_type} result = ({backing_type})value;
             return result;
@@ -692,7 +676,7 @@ namespace torc.lang
             var template = $@"
         public static {torc_type} operator {op}({torc_type} a, {torc_type} b)
         {{
-            var value = a.read_value {op} b.read_value;
+            var value = a {op} b;
             {torc_type} result = ({backing_type})value;
             return result;
         }}";
@@ -713,7 +697,7 @@ namespace torc.lang
             var template = $@"
         public static bool operator {op}({classType} a, {otherType} b)
         {{
-            var result = a.read_value {op} b.read_value;
+            var result = ({classType})a {op} ({otherType})b;
             return result;
         }}";
             return template.Trim();
