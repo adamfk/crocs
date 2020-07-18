@@ -75,81 +75,61 @@ namespace torc.lang
 
         public static bool operator ==(i16 a, i16 b)
         {
-            var result = a.read_value == b.read_value;
+            var result = a._value == b._value;
             return result;
         }
 
         public static bool operator !=(i16 a, i16 b)
         {
-            var result = a.read_value != b.read_value;
+            var result = a._value != b._value;
             return result;
         }
 
 
         public static i16 operator +(i16 a, i16 b)
         {
-            var value = i16.GetBackingValue(a) + i16.GetBackingValue(b);
+            var value = a._value + b._value;
             if (value < i16.MIN) { throw new Exception("underflow!"); }
             if (value > i16.MAX) { throw new Exception("overflow!");  }
             i16 result = (short)value;
             return result;
         }public static i16 operator +(i16 a, i8 b)
         {
-            var value = i16.GetBackingValue(a) + i8.GetBackingValue(b);
-            if (value < i16.MIN) { throw new Exception("underflow!"); }
-            if (value > i16.MAX) { throw new Exception("overflow!");  }
-            i16 result = (short)value;
-            return result;
-        }public static i16 operator +(i16 a, i16 b)
-        {
-            var value = i16.GetBackingValue(a) + i16.GetBackingValue(b);
+            var value = a._value + i8.GetBackingValue(b);
             if (value < i16.MIN) { throw new Exception("underflow!"); }
             if (value > i16.MAX) { throw new Exception("overflow!");  }
             i16 result = (short)value;
             return result;
         }public static i32 operator +(i16 a, i32 b)
         {
-            var value = i16.GetBackingValue(a) + i32.GetBackingValue(b);
+            var value = a._value + i32.GetBackingValue(b);
             if (value < i32.MIN) { throw new Exception("underflow!"); }
             if (value > i32.MAX) { throw new Exception("overflow!");  }
             i32 result = (int)value;
             return result;
         }public static i64 operator +(i16 a, i64 b)
         {
-            var value = i16.GetBackingValue(a) + i64.GetBackingValue(b);
+            var value = a._value + i64.GetBackingValue(b);
             
             i64 result = (long)value;
             return result;
         }public static i16 operator +(i16 a, u8 b)
         {
-            var value = i16.GetBackingValue(a) + u8.GetBackingValue(b);
+            var value = a._value + u8.GetBackingValue(b);
             if (value < i16.MIN) { throw new Exception("underflow!"); }
             if (value > i16.MAX) { throw new Exception("overflow!");  }
             i16 result = (short)value;
             return result;
         }public static i32 operator +(i16 a, u16 b)
         {
-            var value = i16.GetBackingValue(a) + u16.GetBackingValue(b);
+            var value = a._value + u16.GetBackingValue(b);
             if (value < i32.MIN) { throw new Exception("underflow!"); }
             if (value > i32.MAX) { throw new Exception("overflow!");  }
             i32 result = (int)value;
             return result;
         }public static i64 operator +(i16 a, u32 b)
         {
-            var value = i16.GetBackingValue(a) + u32.GetBackingValue(b);
-            
-            i64 result = (long)value;
-            return result;
-        }public static i32 operator +(i16 a, i32 b)
-        {
-            var value = i16.GetBackingValue(a) + i32.GetBackingValue(b);
-            if (value < i32.MIN) { throw new Exception("underflow!"); }
-            if (value > i32.MAX) { throw new Exception("overflow!");  }
-            i32 result = (int)value;
-            return result;
-        }public static i64 operator +(i16 a, i64 b)
-        {
-            var value = i16.GetBackingValue(a) + i64.GetBackingValue(b);
+            var value = a._value + u32.GetBackingValue(b);
             
             i64 result = (long)value;
             return result;
@@ -159,12 +139,12 @@ namespace torc.lang
 
         public override string ToString()
         {
-            return read_value.ToString();
+            return _value.ToString();
         }
 
         public override int GetHashCode()
         {
-            return v.GetHashCode();
+            return _value.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -185,14 +165,14 @@ namespace torc.lang
                 case uint   i: value = i; break;
                 case ulong  i: value = i; break;
 
-                case i8  i: value = i8.GetBackingValue(i);  break;
-                case i16 i: value = i16.GetBackingValue(i); break;
-                case i32 i: value = i32.GetBackingValue(i); break;
-                case i64 i: value = i64.GetBackingValue(i); break;
-                case u8  i: value = u8.GetBackingValue(i);  break;
-                case u16 i: value = u16.GetBackingValue(i); break;
-                case u32 i: value = u32.GetBackingValue(i); break;
-                case u64 i: value = u64.GetBackingValue(i); break;
+                case i8  i: value = i; break;
+                case i16 i: value = i; break;
+                case i32 i: value = i; break;
+                case i64 i: value = i; break;
+                case u8  i: value = i; break;
+                case u16 i: value = i; break;
+                case u32 i: value = i; break;
+                case u64 i: value = i; break;
 
                 default: return false;
             }
