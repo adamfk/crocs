@@ -605,29 +605,27 @@ namespace torc.lang
         {
             var result = "";
 
-            result += GenOverflowingOperator(classType, classType.full_name, classType, op);
-
             //for mixing signed and unsigned
-            foreach (var otherType in types)
-            {
-                if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
+            //foreach (var otherType in types)
+            //{
+            //    if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
 
-                TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64) continue;
+            //    TypeInfo resultType = classType.GetResultType(otherType);
+            //    if (resultType.width > 64) continue;
 
-                if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
-                {
-                    result += GenOverflowingOperator(classType, "IHas" + otherType.full_name.ToUpper(), resultType, op, otherValueGetter: $"b");
-                }
-            }
+            //    if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
+            //    {
+            //        result += GenOverflowingOperator(classType, "IHas" + otherType.full_name.ToUpper(), resultType, op, otherValueGetter: $"b");
+            //    }
+            //}
 
-            foreach (var otherType in types)
-            {
-                TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64) continue;
+            //foreach (var otherType in types)
+            //{
+            //    TypeInfo resultType = classType.GetResultType(otherType);
+            //    if (resultType.width > 64) continue;
 
-                result += GenOverflowingOperator(classType, otherType.full_name, resultType, op);
-            }
+            //    result += GenOverflowingOperator(classType, otherType.full_name, resultType, op);
+            //}
 
             //{ i32 result = i16 + 65534; Assert.Equal<int>(65535, result); }
             foreach (var otherType in types)
@@ -635,7 +633,7 @@ namespace torc.lang
                 TypeInfo resultType = classType.GetResultType(otherType);
                 if (resultType.width > 64) continue;
                 if (resultType.width <= classType.width) continue;
-                if (classType.CanPromoteTo(otherType) && classType.is_signed == otherType.is_signed)
+                if (classType.CanPromoteTo(otherType))
                 {
                     result += GenOverflowingOperator(classType, otherType.memory_name, resultType, op);
                 }
