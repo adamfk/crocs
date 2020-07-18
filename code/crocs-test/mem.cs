@@ -63,5 +63,27 @@ namespace crocs
 
             return copy;
         }
+
+        /// <summary>
+        /// stack allocates and constructs an object
+        /// Prefer to use this method if your object has no default constructor.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static mem<T> place<T>() where T : crocs_obj, new()
+        {
+            return new mem<T>(new T());
+        }
+
+        /// <summary>
+        /// stack allocates an already constructed object.
+        /// use when your object has no default constructor.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>        
+        public static mem<T> place<T>(T obj) where T : crocs_obj
+        {
+            return new mem<T>(obj);
+        }
     }
 }
