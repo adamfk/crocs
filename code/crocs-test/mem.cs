@@ -86,4 +86,19 @@ namespace crocs
             return new mem<T>(obj);
         }
     }
+
+    public static class memory_extensions
+    {
+        public static void copy_from<T>(this T copy_to, T copy_from) where T : crocs_obj
+        {
+            memory.copy_to(source: copy_to, destination: copy_from);
+        }
+
+        ////this method not needed as mem<T> will implicitly convert to T
+        //public static void copy_from<T>(this T copy_to, mem<T> copy_from) where T : crocs_obj
+        //{
+        //    memory.copy_to(source:copy_to, destination: copy_from);
+        //}
+    }
+
 }
