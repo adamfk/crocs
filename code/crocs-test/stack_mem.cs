@@ -1,4 +1,4 @@
-﻿namespace crocs_test
+﻿namespace crocs
 {
     public class stack_mem
     {
@@ -7,7 +7,7 @@
             return new T();
         }
 
-        public static mem<T> place<T>(T obj) where T : crocs_obj, new()
+        public static mem<T> place<T>(T obj) where T : crocs_obj
         {
             return new mem<T>(obj);
         }

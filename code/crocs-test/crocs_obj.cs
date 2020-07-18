@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 
-namespace crocs_test
+namespace crocs
 {
     public class crocs_obj : IDisposable
     {
@@ -12,26 +13,12 @@ namespace crocs_test
             destructed = true;
         }
 
-        public static T shallow_copy<T>(T source) where T : crocs_obj, new()
+        public void _throw_if_destructed()
         {
-            if (source.destructed)
+            if (destructed)
             {
                 throw new MemberAccessException();
             }
-
-            T copy = new T();
-
-            //use reflection to construct field objects
-            var fields = copy.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-            foreach (var field in fields)
-            {
-                var fieldType = field.FieldType;
-                var typeToCreate = fieldType;
-                field.SetValue(copy, field.GetValue(source));
-            }
-
-            return copy;
         }
     }
 }
