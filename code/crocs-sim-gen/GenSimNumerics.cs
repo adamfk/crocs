@@ -270,7 +270,7 @@ namespace crocs_sim
         [Fact]
         public void MakeAll()
         {
-            const string dir_path = @"..\..\..\";
+            const string dir_path = @"..\..\..\..\crocs-test\generated\";
 
             foreach (var type in types)
             {
@@ -282,7 +282,7 @@ namespace crocs_sim
         [Fact]
         public void GenTests()
         {
-            const string dir_path = @"..\..\..\";
+            const string dir_path = @"..\..\..\..\crocs-test\generated\";
             var output = $@"
 //NOTE! AUTO GENERATED
 
@@ -533,6 +533,7 @@ namespace torc.lang
 
         public static implicit operator {typeInfo.memory_name}({backing_type} num) {{ return new {typeInfo.memory_name}(num); }}
         public static implicit operator {backing_type}({typeInfo.memory_name} num) {{ return num._value; }}
+        public static implicit operator decimal({typeInfo.memory_name} num) {{ return num._value; }}
 
         {asTypeConversions}
 
@@ -650,7 +651,7 @@ namespace torc.lang
             var template = $@"
         public static {resultType.full_name} operator {op}({classType.full_name} a, {otherTypeName} b)
         {{
-            var value = ({classType})a {op} ({otherTypeName}){otherValueGetter};
+            var value = (decimal)a {op} (decimal){otherValueGetter};
             {GenOverflowChecks(resultType)}
             {resultType.full_name} result = ({resultType.GetBackingTypeName()})value;
             return result;
@@ -658,50 +659,19 @@ namespace torc.lang
             return template.Trim();
         }
 
-        private static string GenOverflowingOperator(string torc_type, string backing_type, string op, string overflowChecks)
-        {
-            var template = $@"
-        public static {torc_type} operator {op}({torc_type} a, {torc_type} b)
-        {{
-            var value = a {op} b;
-            {overflowChecks}
-            {torc_type} result = ({backing_type})value;
-            return result;
-        }}";
-            return template.Trim();
-        }
-
-        private static string GenNonOverflowingOperator(string torc_type, string backing_type, string op)
-        {
-            var template = $@"
-        public static {torc_type} operator {op}({torc_type} a, {torc_type} b)
-        {{
-            var value = a {op} b;
-            {torc_type} result = ({backing_type})value;
-            return result;
-        }}";
-            return template.Trim();
-        }
-
         private static string GenComparisonOperator(TypeInfo classType, string op)
         {
-            var result = "";
-
-            result += GenComparisonOperator(classType.full_name, op, classType.full_name);
-
-            return result;
-        }
-
-        private static string GenComparisonOperator(string classType, string op, string otherType)
-        {
+            var backingType = classType.GetBackingTypeName();
+            var crocsType = classType.full_name;
             var template = $@"
-        public static bool operator {op}({classType} a, {otherType} b)
+        public static bool operator {op}({crocsType} a, {crocsType} b)
         {{
-            var result = ({classType})a {op} ({otherType})b;
+            var result = ({backingType})a {op} ({backingType})b;
             return result;
         }}";
             return template.Trim();
         }
+
 
         private static List<TypeInfo> GetWideningConversions(TypeInfo typeInfo)
         {
