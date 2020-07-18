@@ -6,7 +6,7 @@ using static crocs.lang.memory;
 namespace crocs_test
 {
 
-    public class Stereo : crocs_obj
+    public class Stereo : CrocsObj
     {
         public int volume;
 

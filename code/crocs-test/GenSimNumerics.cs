@@ -16,7 +16,7 @@ namespace crocs_sim
 
         public TypeInfo(string type_name)
         {
-            var regex = new Regex(@"([iu])(\d+)(r?)");
+            var regex = new Regex(@"([iu])(\d+)");
 
             Match match = regex.Match(type_name);
 
@@ -499,13 +499,12 @@ namespace torc
             var template = $@"
 //NOTE! AUTO GENERATED FILE
 using System;
-using RefExtendsPublic;
 
 #pragma warning disable IDE1006 // Naming Styles
 
 namespace torc.lang
 {{
-    public class {typeInfo.memory_name} : WiftObj, IHas{typeInfo.memory_name.ToUpper()}
+    public struct {typeInfo.memory_name} : WiftObj
     {{
         public const {backing_type} MAX = {typeInfo.GetMaxValue()};
         public const {backing_type} MIN = {typeInfo.GetMinValue()};

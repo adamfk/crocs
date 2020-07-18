@@ -4,7 +4,12 @@ using System.Runtime.Serialization;
 
 namespace crocs.lang
 {
-    public class crocs_obj : IDisposable
+    public interface ICrocsObj : IDisposable
+    {
+        void _throw_if_destructed();
+    }
+
+    public class CrocsObj : ICrocsObj
     {
         private bool destructed = false;
 

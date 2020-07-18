@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace crocs.lang
 {
-    public class mem<T> where T : crocs_obj
+    public class mem<T> where T : CrocsObj
     {
         private T obj;
 
@@ -34,12 +34,12 @@ namespace crocs.lang
 
     public class memory
     {
-        public static mem<T> copy<T>(T source) where T: crocs_obj
+        public static mem<T> copy<T>(T source) where T: CrocsObj
         {
             return new mem<T>(source);
         }
 
-        public static void copy_to<T>(T destination, T source) where T : crocs_obj
+        public static void copy_to<T>(T destination, T source) where T : CrocsObj
         {
             destination._throw_if_destructed();
             source._throw_if_destructed();
@@ -54,7 +54,7 @@ namespace crocs.lang
         }
 
         //source doesn't need to have a public parameterless constructor.
-        public static T shallow_clone<T>(T source) where T : crocs_obj
+        public static T shallow_clone<T>(T source) where T : CrocsObj
         {
             //see https://stackoverflow.com/questions/390578/creating-instance-of-type-without-default-constructor-in-c-sharp-using-reflectio
             T copy = (T)FormatterServices.GetUninitializedObject(typeof(T)); //does not call ctor
@@ -70,7 +70,7 @@ namespace crocs.lang
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static mem<T> place<T>() where T : crocs_obj, new()
+        public static mem<T> place<T>() where T : CrocsObj, new()
         {
             return new mem<T>(new T());
         }
@@ -81,7 +81,7 @@ namespace crocs.lang
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>        
-        public static mem<T> place<T>(T obj) where T : crocs_obj
+        public static mem<T> place<T>(T obj) where T : CrocsObj
         {
             return new mem<T>(obj);
         }
@@ -89,7 +89,7 @@ namespace crocs.lang
 
     public static class memory_extensions
     {
-        public static void copy_from<T>(this T copy_to, T copy_from) where T : crocs_obj
+        public static void copy_from<T>(this T copy_to, T copy_from) where T : CrocsObj
         {
             memory.copy_to(source: copy_to, destination: copy_from);
         }
