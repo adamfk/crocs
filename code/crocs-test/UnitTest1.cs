@@ -1,7 +1,7 @@
-using crocs;
+using crocs.lang;
 using Xunit;
 
-using static crocs.memory;
+using static crocs.lang.memory;
 
 namespace crocs_test
 {

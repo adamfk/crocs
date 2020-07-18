@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace crocs
+namespace crocs.lang
 {
     public class mem<T> where T : crocs_obj
     {

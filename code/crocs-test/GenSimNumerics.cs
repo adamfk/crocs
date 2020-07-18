@@ -12,8 +12,7 @@ namespace crocs_sim
         public readonly char sign_char;
         public readonly int width;
         public readonly string memory_name;
-        public readonly string full_name;   //differs for references
-        public readonly bool is_ref;
+        public readonly string full_name;   //differs for references which aren't implemented anymore. may be added back later
 
         public TypeInfo(string type_name)
         {
@@ -23,7 +22,6 @@ namespace crocs_sim
 
             sign_char = match.Groups[1].Value[0];
             width = int.Parse(match.Groups[2].Value);
-            is_ref = match.Groups[3].Value.Equals("r") ? true : false;
 
             is_signed = sign_char == 'i';
 
@@ -245,24 +243,14 @@ namespace crocs_sim
 
             if (newWidth >= 8)
             {
-                return new TypeInfo(sign_char + width + (is_ref ? "r" : ""));
+                return new TypeInfo(sign_char + width.ToString());
             }
             return null;
         }
 
-
         public bool Equals(TypeInfo other)
         {
             return full_name.Equals(other.full_name);
-        }
-
-        internal TypeInfo AsRef()
-        {
-            if (is_ref)
-            {
-                return this;
-            }
-            return new TypeInfo(full_name + "r");
         }
     }
 
@@ -277,7 +265,6 @@ namespace crocs_sim
         //}
         private static readonly TypeInfo[] types = {
             new TypeInfo("i8"), new TypeInfo("i16"), new TypeInfo("i32"), new TypeInfo("i64"), new TypeInfo("u8"), new TypeInfo("u16"), new TypeInfo("u32"), new TypeInfo("u64"),
-            new TypeInfo("i8r"), new TypeInfo("i16r"), new TypeInfo("i32r"), new TypeInfo("i64r"), new TypeInfo("u8r"), new TypeInfo("u16r"), new TypeInfo("u32r"), new TypeInfo("u64r"),
         };
 
         [Fact]
@@ -287,7 +274,6 @@ namespace crocs_sim
 
             foreach (var type in types)
             {
-                if (type.is_ref) continue;
                 var output = Build(type);
                 File.WriteAllText(dir_path + type.full_name + ".cs", output);
             }
@@ -300,8 +286,7 @@ namespace crocs_sim
             var output = $@"
 //NOTE! AUTO GENERATED
 
-using RefExtendsPublic;
-using torc.lang;
+using crocs.lang;
 using Xunit;
 using FluentAssertions;
 
@@ -345,7 +330,6 @@ namespace torc
                     inner += tab + $"{{ {type.full_name} n = {value}; Assert.Equal<{type.memory_name}>({binary}, n.v); }}\n";
                 }
 
-                if (type.is_ref) continue;
                 if (type.is_signed)
                 {
                     genInner(0);
@@ -376,8 +360,6 @@ namespace torc
             var tab = "            ";
             foreach (var type in types)
             {
-                if (type.is_ref) continue;
-
                 var widerTypes = GetWideningConversions(type);
 
                 foreach (var widerType in widerTypes)
@@ -408,14 +390,8 @@ namespace torc
             var topDecl = "";
             foreach (var type in types)
             {
-                if (!type.is_ref)
-                {
-                    topDecl += tab + $"{type.full_name} {type.full_name} = 1;\n";
-                }
-                else
-                {
-                    topDecl += tab + $"{type.full_name} {type.full_name} = {type.memory_name}.r;\n";
-                }
+
+                topDecl += tab + $"{type.full_name} {type.full_name} = {type.memory_name}.r;\n";
 
                 foreach (var otherType in types)
                 {
@@ -634,78 +610,6 @@ namespace torc.lang
         }}
     }}
 
-    ////////////////////////////////////////////////
-
-    public struct {typeInfo.memory_name}r //: IOtherHas{typeInfo.memory_name.ToUpper()}
-    {{
-        public const {backing_type} MAX = {typeInfo.GetMaxValue()};
-        public const {backing_type} MIN = {typeInfo.GetMinValue()};
-
-        private {typeInfo.memory_name} refr_obj;
-
-        public {typeInfo.memory_name}r({typeInfo.memory_name} refr_obj)
-        {{
-            this.refr_obj = refr_obj;
-        }}
-
-        public {typeInfo.memory_name} v
-        {{
-            get
-            {{
-                return refr_obj.cp; //TODOLOW think about
-            }}
-
-            set
-            {{
-                refr_obj.v = value;
-            }}
-        }}
-
-        internal static {backing_type} GetBackingValue({typeInfo.memory_name} n) {{ return {typeInfo.memory_name}.GetBackingValue(n); }}
-
-        /// <summary>
-        /// creates a copy of {typeInfo.memory_name} memory. Useful for when passing to functions.
-        /// </summary>
-        public {typeInfo.memory_name} cp => v;
-
-        /// <summary>
-        /// returns a new reference to the same {typeInfo.memory_name} memory that this reference already points to.
-        /// </summary>
-        public {typeInfo.memory_name}r r => this;
-
-        public void point_to({typeInfo.memory_name} refr_obj) {{ this.refr_obj = refr_obj; }}
-
-        //public static implicit operator {backing_type}({typeInfo.memory_name}r num) {{ return num.read_value; }}
-        public static implicit operator {typeInfo.memory_name}({typeInfo.memory_name}r num) {{ return num.cp; }}
-
-        {asTypeConversions}
-
-        { wideningConversionsRef.Trim() }
-
-        { narrowingConversions.Trim() }
-
-        { wrappingConversions.Trim() }
-
-        { GenComparisonOperatorRef(typeInfo.memory_name, "==") + "\n" }
-        { GenComparisonOperatorRef(typeInfo.memory_name, "!=") + "\n" }
-
-        { GenOverflowingOperatorRef(typeInfo, "+") + "\n" }
-
-        public override bool Equals(object obj)
-        {{
-            return refr_obj.Equals(obj);            
-        }}
-
-        public override string ToString()
-        {{
-            return v.ToString();
-        }}
-
-        public override int GetHashCode()
-        {{
-            return v.GetHashCode();
-        }}
-    }}
 }}
 ";
 
@@ -725,7 +629,7 @@ namespace torc.lang
                 if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
 
                 TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64 || otherType.is_ref) continue;
+                if (resultType.width > 64) continue;
 
                 if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
                 {
@@ -735,8 +639,6 @@ namespace torc.lang
 
             foreach (var otherType in types)
             {
-                if (!otherType.is_ref) continue;
-
                 TypeInfo resultType = classType.GetResultType(otherType);
                 if (resultType.width > 64) continue;
 
@@ -746,8 +648,6 @@ namespace torc.lang
             //{ i32 result = i16 + 65534; Assert.Equal<int>(65535, result); }
             foreach (var otherType in types)
             {
-                if (!otherType.is_ref) continue;
-
                 TypeInfo resultType = classType.GetResultType(otherType);
                 if (resultType.width > 64) continue;
                 if (resultType.width <= classType.width) continue;
@@ -788,56 +688,6 @@ namespace torc.lang
             return template.Trim();
         }
 
-        //TODO refactor to share with non-ref code!
-        private static string GenOverflowingOperatorRef(TypeInfo classType, string op)
-        {
-            string result = ""; // GenOverflowingOperatorRef(classType, op, overflowChecks, other_type: classType, result_type: classType);
-
-
-            result += GenOverflowingOperator(classType.AsRef(), classType.full_name, classType, op);
-
-            //for mixing signed and unsigned
-            foreach (var otherType in types)
-            {
-                if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
-
-                TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64 || otherType.is_ref) continue;
-
-                if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
-                {
-                    result += GenOverflowingOperator(classType.AsRef(), "IHas" + otherType.full_name.ToUpper(), resultType, op, otherValueGetter: $"{otherType.full_name}.GetBackingValue(({otherType.memory_name})b)");
-                }
-            }
-
-            foreach (var otherType in types)
-            {
-                if (!otherType.is_ref) continue;
-
-                TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64) continue;
-
-                result += GenOverflowingOperator(classType.AsRef(), otherType.full_name, resultType, op);
-            }
-
-            //{ i32 result = i16 + 65534; Assert.Equal<int>(65535, result); }
-            foreach (var otherType in types)
-            {
-                if (!otherType.is_ref) continue;
-
-                TypeInfo resultType = classType.GetResultType(otherType);
-                if (resultType.width > 64) continue;
-                if (resultType.width <= classType.width) continue;
-                if (classType.CanPromoteTo(otherType) && classType.is_signed == otherType.is_signed)
-                {
-                    result += GenOverflowingOperator(classType.AsRef(), otherType.memory_name, resultType, op);
-                }
-            }
-
-            return result;
-        }
-
-
         private static string GenNonOverflowingOperator(string torc_type, string backing_type, string op)
         {
             var template = $@"
@@ -849,23 +699,6 @@ namespace torc.lang
         }}";
             return template.Trim();
         }
-
-        private static string GenNonOverflowingOperatorRef(string torc_type, string backing_type, string op)
-        {
-            var template = $@"
-        public static {torc_type} operator {op}({torc_type}r a, {torc_type} b)
-        {{
-            var value = {torc_type}r.GetBackingValue(a.v) {op} {torc_type}r.GetBackingValue(b.v);
-            {torc_type} result = ({backing_type})value;
-            return result;
-        }}";
-            return template.Trim();
-        }
-
-        //List<TypeInfo> GetOtherTypes(TypeInfo type)
-        //{
-        //    List<TypeInfo> others = new List<TypeInfo>();
-        //}
 
         private static string GenComparisonOperator(TypeInfo classType, string op)
         {
@@ -882,17 +715,6 @@ namespace torc.lang
         public static bool operator {op}({classType} a, {otherType} b)
         {{
             var result = a.read_value {op} b.read_value;
-            return result;
-        }}";
-            return template.Trim();
-        }
-
-        private static string GenComparisonOperatorRef(string torc_type, string op)
-        {
-            var template = $@"
-        public static bool operator {op}({torc_type}r a, {torc_type} b)
-        {{
-            var result = {torc_type}r.GetBackingValue(a.v) {op} {torc_type}r.GetBackingValue(b.v);
             return result;
         }}";
             return template.Trim();

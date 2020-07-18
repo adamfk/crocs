@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace crocs
+namespace crocs.lang
 {
     public class crocs_obj : IDisposable
     {

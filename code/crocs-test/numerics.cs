@@ -1,4 +1,4 @@
-﻿using crocs_obj;
+﻿using crocs.lang;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +10,7 @@ using Xunit;
 
 using i8_psi = System.SByte;
 
-namespace crocs_obj
+namespace crocs.lang
 {
     public struct i16 : IDisposable
     {
