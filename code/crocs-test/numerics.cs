@@ -14,6 +14,37 @@ namespace crocs.lang
 {
     public class Numerics
     {
+        public static bool object_equals_number(object obj, decimal value) {
+            if (obj == null) { return false; }
+
+            decimal obj_value;
+
+            switch (obj)
+            {
+                case sbyte  i: obj_value = i; break;
+                case short  i: obj_value = i; break;
+                case int    i: obj_value = i; break;
+                case long   i: obj_value = i; break;
+                case byte   i: obj_value = i; break;
+                case ushort i: obj_value = i; break;
+                case uint   i: obj_value = i; break;
+                case ulong  i: obj_value = i; break;
+
+                case i8  i: obj_value = i;  break;
+                case i16 i: obj_value = i; break;
+                case i32 i: obj_value = i; break;
+                case i64 i: obj_value = i; break;
+                case u8  i: obj_value = i;  break;
+                case u16 i: obj_value = i; break;
+                case u32 i: obj_value = i; break;
+                case u64 i: obj_value = i; break;
+
+                default: return false;
+            }
+
+            return obj_value == value;
+        }
+
         public static u64 convert_to_u64_ort(decimal value)
         {
             if (value > u64.MAX || value < u64.MIN)

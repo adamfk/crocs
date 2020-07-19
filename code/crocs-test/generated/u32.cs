@@ -120,36 +120,7 @@ namespace crocs.lang
 
         public override bool Equals(object obj)
         {
-            if (obj == null) { return false; }
-            if (ReferenceEquals(this, obj)) { return true; }
-
-            decimal value;
-
-            switch (obj)
-            {
-                case sbyte  i: value = i; break;
-                case short  i: value = i; break;
-                case int    i: value = i; break;
-                case long   i: value = i; break;
-                case byte   i: value = i; break;
-                case ushort i: value = i; break;
-                case uint   i: value = i; break;
-                case ulong  i: value = i; break;
-
-                case i8  i: value = i;  break;
-                case i16 i: value = i; break;
-                case i32 i: value = i; break;
-                case i64 i: value = i; break;
-                case u8  i: value = i;  break;
-                case u16 i: value = i; break;
-                case u32 i: value = i; break;
-                case u64 i: value = i; break;
-
-                default: return false;
-            }
-
-            if (value < MIN || value > MAX) { return false; }
-            return value == (uint)value;
+            return Numerics.object_equals_number(obj, _value);
         }
     }
 
