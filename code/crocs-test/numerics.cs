@@ -136,14 +136,21 @@ namespace numerics_test
     public class Test
     {
         [Fact]
-        public void test1()
+        public void hand_test1()
         {
-            i8 i8 = 1;
-            u8 u8 = 1;
-            { var c = i8 + u8; }
-            
-            u32 u32 = 1;
-            { var c = i8 + u32; }
+            {
+                i8 i8 = 1;
+                u8 u8 = 1;
+                var c = i8 + u8;
+            }
+
+            { u8 u8 = 255; Assert.True(u8 > 127); }
+
+            //note how we don't need comparison overload for u8,u64 as u8 is promoted to u64
+            { u8 u8 = 255; u64 u64 = u8; Assert.True(u8 == u64); }
+
+            //for now, we let crocs ints to be promoted to c# primitive `int` for this comparison
+            { u8 u8 = 127; i8 i8 = 127; Assert.True(u8 == i8); }
         }
     }
 
