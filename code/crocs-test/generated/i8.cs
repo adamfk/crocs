@@ -60,6 +60,13 @@ namespace crocs.lang
         public static bool operator !=(i8 a, i8 b) => (sbyte)a != (sbyte)b;
         //TODO add more operators
 
+        //overflowing operators
+        public static i8 operator +(i8 a, i8 b) => Numerics.convert_to_i8_ort((decimal)a + (decimal)b);
+        public static i16 operator +(i8 a, i16 b) => Numerics.convert_to_i16_ort((decimal)a + (decimal)b);
+        public static i32 operator +(i8 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(i8 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        //TODO add more operators
+
         public override string ToString() => _value.ToString();
 
         public override int GetHashCode() => _value.GetHashCode();

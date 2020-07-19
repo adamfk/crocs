@@ -16,15 +16,7 @@ namespace crocs.lang
     public interface IHasU16 { }
     public interface IHasU32 { }
     public interface IHasU64 { }
-    public interface IHasI8  { 
-        public static i8 operator +(IHasI8 a, IHasI8 b) => Numerics.convert_to_i8_ort((decimal)(i8)a + (decimal)(i8)b);
-        public static i8 operator +(IHasI8 a, i8 b) => Numerics.convert_to_i8_ort((decimal)(i8)a + (decimal)(i8)b);
-        public static i8 operator +(i8 a, IHasI8 b) => Numerics.convert_to_i8_ort((decimal)(i8)a + (decimal)(i8)b);
-        public static i16 operator +(IHasI8 a, IHasI16 b) => Numerics.convert_to_i16_ort((decimal)(i8)a + (decimal)(i16)b);
-        public static i32 operator +(IHasI8 a, IHasI32 b) => Numerics.convert_to_i32_ort((decimal)(i8)a + (decimal)(i32)b);
-        public static i64 operator +(IHasI8 a, IHasI64 b) => Numerics.convert_to_i64_ort((decimal)(i8)a + (decimal)(i64)b);
-
-    }
+    public interface IHasI8  { }
     public interface IHasI16 { }
     public interface IHasI32 { }
     public interface IHasI64 { }
