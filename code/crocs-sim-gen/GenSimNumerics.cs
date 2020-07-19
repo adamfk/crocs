@@ -292,7 +292,6 @@ namespace crocs_sim
 
 using crocs.lang;
 using Xunit;
-using FluentAssertions;
 
 namespace crocs_tests
 {{
@@ -368,7 +367,7 @@ namespace crocs_tests
 
                 foreach (var widerType in widerTypes)
                 {
-                    inner += tab + $"{{ {type.full_name} n = {type.GetMaxValue()}; {type.full_name}r r = n.r; {widerType.full_name} wider = n; Assert.Equal<{widerType.memory_name}>({type.GetMaxValue()}, wider); wider = r; Assert.Equal<{widerType.memory_name}>({type.GetMaxValue()}, wider);}}\n";
+                    inner += tab + $"{{ {type.full_name} n = {type.GetMaxValue()}; {widerType.full_name} wider = n; Assert.Equal<{widerType.memory_name}>({type.GetMaxValue()}, wider); Assert.Equal<{widerType.memory_name}>({type.GetMaxValue()}, wider);}}\n";
                 }
 
                 inner += "\n";
@@ -395,7 +394,7 @@ namespace crocs_tests
             foreach (var type in types)
             {
 
-                topDecl += tab + $"{type.full_name} {type.full_name} = {type.memory_name}.r;\n";
+                topDecl += tab + $"{type.full_name} {type.full_name} = 1;\n";
 
                 foreach (var otherType in types)
                 {
