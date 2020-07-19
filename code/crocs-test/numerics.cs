@@ -10,37 +10,6 @@ using Xunit;
 
 using i8_psi = System.SByte;
 
-namespace crocs.lang
-{
-    public struct i16 : IDisposable
-    {
-        
-        private short value;
-        //public i8_psi p;
-
-        private i16(short value)
-        {
-            value = 0;
-            this.value = value;
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static implicit operator short(i16 value)
-        {
-            return value.value;
-        }
-
-        public static implicit operator i16(short value)
-        {
-            return new i16(value);
-        }
-    }
-}
-
 namespace numerics_test
 {
     public class Test
@@ -48,18 +17,12 @@ namespace numerics_test
         [Fact]
         public void test1()
         {
-            i16 a = 123;
-            i16 aa = 123;
-            i16 ac = (i16)(a + aa);
-
-            short b = a;
-            i16 c = (short)(b + a);
-            short s1 = 1;
-            short s2 = 3;
-            short s3 = (short)(s1 + s2);
-            s1 += s2;
-
-            using i16 num = 66;
+            i8 i8 = 1;
+            u8 u8 = 1;
+            { var c = i8 + u8; }
+            
+            u32 u32 = 1;
+            { var c = i8 + u32; }
         }
     }
 

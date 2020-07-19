@@ -5,7 +5,7 @@ using crocs.lang;
 
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace torc.lang
+namespace crocs.lang
 {
     public struct u8 : ICrocsObj
     {
@@ -81,7 +81,14 @@ namespace torc.lang
         }
 
 
-        public static i16 operator +(u8 a, i16 b)
+        public static u8 operator +(u8 a, u8 b)
+        {
+            var value = (decimal)a + (decimal)b;
+            if (value < u8.MIN) { throw new Exception("underflow!"); }
+            if (value > u8.MAX) { throw new Exception("overflow!");  }
+            u8 result = (byte)value;
+            return result;
+        }public static i16 operator +(u8 a, i16 b)
         {
             var value = (decimal)a + (decimal)b;
             if (value < i16.MIN) { throw new Exception("underflow!"); }

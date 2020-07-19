@@ -4,6 +4,10 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Xunit;
 
+
+//TODO put in num._throw_if_destructed(); in as many places as possible
+//TODO check widening conversions. I think some are missing.
+
 namespace crocs_sim
 {
     public class TypeInfo
@@ -290,7 +294,7 @@ using crocs.lang;
 using Xunit;
 using FluentAssertions;
 
-namespace torc
+namespace crocs_tests
 {{
     public class AllNumericTests 
     {{
@@ -501,7 +505,7 @@ using crocs.lang;
 
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace torc.lang
+namespace crocs.lang
 {{
     public struct {typeInfo.memory_name} : ICrocsObj
     {{
@@ -604,6 +608,8 @@ namespace torc.lang
         private static string GenOverflowingOperator(TypeInfo classType, string op)
         {
             var result = "";
+
+            result += GenOverflowingOperator(classType, classType.full_name, classType, op);
 
             //for mixing signed and unsigned
             //foreach (var otherType in types)

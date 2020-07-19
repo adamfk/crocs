@@ -5,7 +5,7 @@ using crocs.lang;
 
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace torc.lang
+namespace crocs.lang
 {
     public struct u64 : ICrocsObj
     {
@@ -148,7 +148,13 @@ namespace torc.lang
         }
 
 
-        
+        public static u64 operator +(u64 a, u64 b)
+        {
+            var value = (decimal)a + (decimal)b;
+            
+            u64 result = (ulong)value;
+            return result;
+        }
 
 
 
