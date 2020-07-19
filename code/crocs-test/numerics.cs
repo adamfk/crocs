@@ -8,8 +8,6 @@ using Xunit;
 //This one is rather important... wouldn't want to create LinkedListObj<T> class and LinkedListPrimitive<T> class. No way.
 //we need a common disposable root type.
 
-using i8_psi = System.SByte;
-
 namespace crocs.lang
 {
     //these are needed to avoid implicit conversion confusion with integer literals when mixing signed and unsigned.
@@ -153,5 +151,6 @@ namespace numerics_test
             { u8 u8 = 127; i8 i8 = 127; Assert.True(u8 == i8); }
         }
     }
-
 }
+
+
