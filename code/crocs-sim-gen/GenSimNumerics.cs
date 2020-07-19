@@ -169,6 +169,7 @@ namespace crocs.lang
             result += GenOverflowingOperator(classType, classType.crocs_name, classType, op);
 
             //for mixing signed and unsigned
+            // See https://github.com/adamfk/crocs/issues/12 specifically for IHas
             foreach (var otherType in types)
             {
                 if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing

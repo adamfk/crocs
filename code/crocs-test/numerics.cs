@@ -12,7 +12,8 @@ using i8_psi = System.SByte;
 
 namespace crocs.lang
 {
-    ////these are needed to avoid implicit conversion confusions when mixing signed and unsigned.
+    //these are needed to avoid implicit conversion confusion with integer literals when mixing signed and unsigned.
+    // See https://github.com/adamfk/crocs/issues/12
     public interface IHasU8  { }
     public interface IHasU16 { }
     public interface IHasU32 { }
