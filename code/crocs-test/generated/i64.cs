@@ -79,17 +79,9 @@ namespace crocs.lang
         public i8 wrap_to_i8 => unchecked((sbyte)_value);
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
-        public static bool operator ==(i64 a, i64 b)
-        {
-            var result = (long)a == (long)b;
-            return result;
-        }
+        public static bool operator ==(i64 a, i64 b)  => (long)a == (long)b;
 
-        public static bool operator !=(i64 a, i64 b)
-        {
-            var result = (long)a != (long)b;
-            return result;
-        }
+        public static bool operator !=(i64 a, i64 b)  => (long)a != (long)b;
 
 
                 public static i64 operator +(i64 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);

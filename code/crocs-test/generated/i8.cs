@@ -54,17 +54,9 @@ namespace crocs.lang
 
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
-        public static bool operator ==(i8 a, i8 b)
-        {
-            var result = (sbyte)a == (sbyte)b;
-            return result;
-        }
+        public static bool operator ==(i8 a, i8 b)  => (sbyte)a == (sbyte)b;
 
-        public static bool operator !=(i8 a, i8 b)
-        {
-            var result = (sbyte)a != (sbyte)b;
-            return result;
-        }
+        public static bool operator !=(i8 a, i8 b)  => (sbyte)a != (sbyte)b;
 
 
                 public static i8 operator +(i8 a, i8 b)  => Numerics.convert_to_i8_ort((decimal)a + (decimal)b);

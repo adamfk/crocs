@@ -220,13 +220,7 @@ namespace crocs.lang
         {
             var backingType = classType.GetBackingTypeName();
             var crocsType = classType.crocs_name;
-            var template = $@"
-        public static bool operator {op}({crocsType} a, {crocsType} b)
-        {{
-            var result = ({backingType})a {op} ({backingType})b;
-            return result;
-        }}";
-            return template.Trim();
+            return $"public static bool operator {op}({crocsType} a, {crocsType} b)  => ({backingType})a {op} ({backingType})b;";
         }
 
 

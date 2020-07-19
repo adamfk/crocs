@@ -72,17 +72,9 @@ namespace crocs.lang
         public i8 wrap_to_i8 => unchecked((sbyte)_value);
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
-        public static bool operator ==(u32 a, u32 b)
-        {
-            var result = (uint)a == (uint)b;
-            return result;
-        }
+        public static bool operator ==(u32 a, u32 b)  => (uint)a == (uint)b;
 
-        public static bool operator !=(u32 a, u32 b)
-        {
-            var result = (uint)a != (uint)b;
-            return result;
-        }
+        public static bool operator !=(u32 a, u32 b)  => (uint)a != (uint)b;
 
 
                 public static u32 operator +(u32 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
