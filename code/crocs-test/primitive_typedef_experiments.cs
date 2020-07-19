@@ -11,7 +11,7 @@ namespace numerics_typedef_test
 
     // new type style typedef
     // https://github.com/adamfk/crocs/issues/8
-    public struct i8_psi : ICrocsObj, IHasU8
+    public struct i8_psi : ICrocsObj, IHasI8
     {
         private bool _destructed;
         private sbyte _value;
