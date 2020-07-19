@@ -39,65 +39,47 @@ namespace crocs.lang
         public static implicit operator uint(u32 num) { return num._value; }
         public static implicit operator decimal(u32 num) { return num._value; }
 
+        //explicit widening conversions
         
         public u64 as_u64 => _value;
         public i64 as_i64 => _value;
 
+        //implicit widening conversions
         public static implicit operator u64(u32 num) { return num._value; }
         public static implicit operator i64(u32 num) { return num._value; }
 
-        public i32 as_i32_ort {
-            get => Numerics.convert_to_i32_ort(_value);
-        }
+        //narrowing conversions
+        public i32 as_i32_ort => Numerics.convert_to_i32_ort(_value);
+        public i16 as_i16_ort => Numerics.convert_to_i16_ort(_value);
+        public u16 as_u16_ort => Numerics.convert_to_u16_ort(_value);
+        public i8 as_i8_ort => Numerics.convert_to_i8_ort(_value);
+        public u8 as_u8_ort => Numerics.convert_to_u8_ort(_value);
 
-        public i16 as_i16_ort {
-            get => Numerics.convert_to_i16_ort(_value);
-        }
-
-        public u16 as_u16_ort {
-            get => Numerics.convert_to_u16_ort(_value);
-        }
-
-        public i8 as_i8_ort {
-            get => Numerics.convert_to_i8_ort(_value);
-        }
-
-        public u8 as_u8_ort {
-            get => Numerics.convert_to_u8_ort(_value);
-        }
-
+        //wrapping conversions
         public i32 wrap_to_i32 => unchecked((int)_value);
         public i16 wrap_to_i16 => unchecked((short)_value);
         public u16 wrap_to_u16 => unchecked((ushort)_value);
         public i8 wrap_to_i8 => unchecked((sbyte)_value);
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
+        //comparison operators
         public static bool operator ==(u32 a, u32 b)  => (uint)a == (uint)b;
-
         public static bool operator !=(u32 a, u32 b)  => (uint)a != (uint)b;
+        //TODO add more operators
 
-
-                public static u32 operator +(u32 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
+        //overflowing operators
+        public static u32 operator +(u32 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
         public static i64 operator +(u32 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
         public static u64 operator +(u32 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
 
 
+        //TODO add more operators
 
+        public override string ToString() => _value.ToString();
 
-        public override string ToString()
-        {
-            return _value.ToString();
-        }
+        public override int GetHashCode() => _value.GetHashCode();
 
-        public override int GetHashCode()
-        {
-            return _value.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Numerics.object_equals_number(obj, _value);
-        }
+        public override bool Equals(object obj) => Numerics.object_equals_number(obj, _value);
     }
 
 }

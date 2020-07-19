@@ -81,11 +81,7 @@ namespace crocs_sim
                 var narrowTypeName = narrowTypeInfo.crocs_name;
 
                 //TODOLOW don't use decimal types
-                narrowingConversions += $@"
-        public {narrowTypeName} as_{narrowTypeName}_ort {{
-            get => Numerics.convert_to_{narrowTypeName}_ort(_value);
-        }}
-";
+                narrowingConversions += $"        public {narrowTypeName} as_{narrowTypeName}_ort => Numerics.convert_to_{narrowTypeName}_ort(_value);\n";
 
                 wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => unchecked(({narrowTypeInfo.GetBackingTypeName()})_value);\n";
             }
@@ -131,34 +127,32 @@ namespace crocs.lang
         public static implicit operator {backing_type}({typeInfo.crocs_name} num) {{ return num._value; }}
         public static implicit operator decimal({typeInfo.crocs_name} num) {{ return num._value; }}
 
-        {asTypeConversions}
+        //explicit widening conversions
+        { asTypeConversions }
 
+        //implicit widening conversions
         { wideningConversions.Trim() }
 
+        //narrowing conversions
         { narrowingConversions.Trim() }
 
+        //wrapping conversions
         { wrappingConversions.Trim() }
 
-        { GenComparisonOperator(typeInfo, "==") + "\n" }
-        { GenComparisonOperator(typeInfo, "!=") + "\n" }
+        //comparison operators
+        { GenComparisonOperator(typeInfo, "==") }
+        { GenComparisonOperator(typeInfo, "!=") }
+        //TODO add more operators
 
-        { GenOverflowingOperator(typeInfo, "+") + "\n" }
+        //overflowing operators
+{ GenOverflowingOperator(typeInfo, "+") + "\n" }
+        //TODO add more operators
 
+        public override string ToString() => _value.ToString();
 
-        public override string ToString()
-        {{
-            return _value.ToString();
-        }}
+        public override int GetHashCode() => _value.GetHashCode();
 
-        public override int GetHashCode()
-        {{
-            return _value.GetHashCode();
-        }}
-
-        public override bool Equals(object obj)
-        {{
-            return Numerics.object_equals_number(obj, _value);
-        }}
+        public override bool Equals(object obj) => Numerics.object_equals_number(obj, _value);
     }}
 
 }}
