@@ -40,7 +40,6 @@ namespace crocs.lang
         public static implicit operator decimal(u16 num) { return num._value; }
 
         //explicit widening conversions
-        
         public u32 as_u32 => _value;
         public u64 as_u64 => _value;
         public i32 as_i32 => _value;
@@ -63,18 +62,16 @@ namespace crocs.lang
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
         //comparison operators
-        public static bool operator ==(u16 a, u16 b)  => (ushort)a == (ushort)b;
-        public static bool operator !=(u16 a, u16 b)  => (ushort)a != (ushort)b;
+        public static bool operator ==(u16 a, u16 b) => (ushort)a == (ushort)b;
+        public static bool operator !=(u16 a, u16 b) => (ushort)a != (ushort)b;
         //TODO add more operators
 
         //overflowing operators
-        public static u16 operator +(u16 a, u16 b)  => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
-        public static i32 operator +(u16 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
-        public static i64 operator +(u16 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
-        public static u32 operator +(u16 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
-        public static u64 operator +(u16 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
-
-
+        public static u16 operator +(u16 a, u16 b) => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
+        public static i32 operator +(u16 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(u16 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static u32 operator +(u16 a, u32 b) => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
+        public static u64 operator +(u16 a, u64 b) => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

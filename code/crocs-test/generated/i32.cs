@@ -40,7 +40,6 @@ namespace crocs.lang
         public static implicit operator decimal(i32 num) { return num._value; }
 
         //explicit widening conversions
-        
         public i64 as_i64 => _value;
 
         //implicit widening conversions
@@ -61,15 +60,13 @@ namespace crocs.lang
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
         //comparison operators
-        public static bool operator ==(i32 a, i32 b)  => (int)a == (int)b;
-        public static bool operator !=(i32 a, i32 b)  => (int)a != (int)b;
+        public static bool operator ==(i32 a, i32 b) => (int)a == (int)b;
+        public static bool operator !=(i32 a, i32 b) => (int)a != (int)b;
         //TODO add more operators
 
         //overflowing operators
-        public static i32 operator +(i32 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
-        public static i64 operator +(i32 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
-
-
+        public static i32 operator +(i32 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(i32 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

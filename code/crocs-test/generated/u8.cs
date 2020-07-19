@@ -40,7 +40,6 @@ namespace crocs.lang
         public static implicit operator decimal(u8 num) { return num._value; }
 
         //explicit widening conversions
-        
         public u16 as_u16 => _value;
         public u32 as_u32 => _value;
         public u64 as_u64 => _value;
@@ -63,20 +62,18 @@ namespace crocs.lang
         public i8 wrap_to_i8 => unchecked((sbyte)_value);
 
         //comparison operators
-        public static bool operator ==(u8 a, u8 b)  => (byte)a == (byte)b;
-        public static bool operator !=(u8 a, u8 b)  => (byte)a != (byte)b;
+        public static bool operator ==(u8 a, u8 b) => (byte)a == (byte)b;
+        public static bool operator !=(u8 a, u8 b) => (byte)a != (byte)b;
         //TODO add more operators
 
         //overflowing operators
-        public static u8 operator +(u8 a, u8 b)  => Numerics.convert_to_u8_ort((decimal)a + (decimal)b);
-        public static i16 operator +(u8 a, i16 b)  => Numerics.convert_to_i16_ort((decimal)a + (decimal)b);
-        public static i32 operator +(u8 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
-        public static i64 operator +(u8 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
-        public static u16 operator +(u8 a, u16 b)  => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
-        public static u32 operator +(u8 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
-        public static u64 operator +(u8 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
-
-
+        public static u8 operator +(u8 a, u8 b) => Numerics.convert_to_u8_ort((decimal)a + (decimal)b);
+        public static i16 operator +(u8 a, i16 b) => Numerics.convert_to_i16_ort((decimal)a + (decimal)b);
+        public static i32 operator +(u8 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(u8 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static u16 operator +(u8 a, u16 b) => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
+        public static u32 operator +(u8 a, u32 b) => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
+        public static u64 operator +(u8 a, u64 b) => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

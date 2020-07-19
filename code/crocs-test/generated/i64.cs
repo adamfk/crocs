@@ -64,14 +64,12 @@ namespace crocs.lang
         public u8 wrap_to_u8 => unchecked((byte)_value);
 
         //comparison operators
-        public static bool operator ==(i64 a, i64 b)  => (long)a == (long)b;
-        public static bool operator !=(i64 a, i64 b)  => (long)a != (long)b;
+        public static bool operator ==(i64 a, i64 b) => (long)a == (long)b;
+        public static bool operator !=(i64 a, i64 b) => (long)a != (long)b;
         //TODO add more operators
 
         //overflowing operators
-        public static i64 operator +(i64 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
-
-
+        public static i64 operator +(i64 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

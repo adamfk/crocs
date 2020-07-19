@@ -69,7 +69,7 @@ namespace crocs_sim
             foreach (var widerType in widenToTypes)
             {
                 wideningConversions += $"        public static implicit operator {widerType.crocs_name}({typeInfo.crocs_name} num) {{ return num._value; }}\n";
-                asTypeConversions += $"\n        public {widerType.crocs_name} as_{widerType.crocs_name} => _value;";
+                asTypeConversions += $"        public {widerType.crocs_name} as_{widerType.crocs_name} => _value;\n";
             }
 
             var narrowingConversions = "";
@@ -128,7 +128,7 @@ namespace crocs.lang
         public static implicit operator decimal({typeInfo.crocs_name} num) {{ return num._value; }}
 
         //explicit widening conversions
-        { asTypeConversions }
+        { asTypeConversions.Trim() }
 
         //implicit widening conversions
         { wideningConversions.Trim() }
@@ -145,7 +145,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //overflowing operators
-{ GenOverflowingOperator(typeInfo, "+") + "\n" }
+        { GenOverflowingOperator(typeInfo, "+").Trim() }
         //TODO add more operators
 
         public override string ToString() => _value.ToString();
@@ -207,14 +207,14 @@ namespace crocs.lang
 
         private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = null)
         {
-            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b)  => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal)b);\n";
+            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal)b);\n";
         }
 
         private static string GenComparisonOperator(TypeInfo classType, string op)
         {
             var backingType = classType.GetBackingTypeName();
             var crocsType = classType.crocs_name;
-            return $"public static bool operator {op}({crocsType} a, {crocsType} b)  => ({backingType})a {op} ({backingType})b;";
+            return $"public static bool operator {op}({crocsType} a, {crocsType} b) => ({backingType})a {op} ({backingType})b;";
         }
 
 
