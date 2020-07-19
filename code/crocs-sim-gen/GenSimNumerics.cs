@@ -32,22 +32,6 @@ namespace crocs_sim
             File.WriteAllText(dir_path + "numerics_methods.txt", BuildConvertToTypeOrtFunctions());
         }
 
-
-        private static string GenOverflowChecks(TypeInfo typeInfo)
-        {
-            if (typeInfo.width >= 64)
-            {
-                return "";
-            }
-
-            var overflowChecks = $@"
-            if (value < {typeInfo.crocs_name}.MIN) {{ throw new Exception(""underflow!""); }}
-            if (value > {typeInfo.crocs_name}.MAX) {{ throw new Exception(""overflow!"");  }}
-                ".Trim();
-
-            return overflowChecks;
-        }
-
         public string BuildConvertToTypeOrtFunctions()
         {
             string output = "";
@@ -229,17 +213,7 @@ namespace crocs.lang
 
         private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = null)
         {
-            otherValueGetter = otherValueGetter ?? $"b";
-
-            var template = $@"
-        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b)
-        {{
-            var value = (decimal)a {op} (decimal){otherValueGetter};
-            {GenOverflowChecks(resultType)}
-            {resultType.crocs_name} result = ({resultType.GetBackingTypeName()})value;
-            return result;
-        }}";
-            return template.Trim();
+            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b)  => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal)b);\n";
         }
 
         private static string GenComparisonOperator(TypeInfo classType, string op)

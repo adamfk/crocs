@@ -79,40 +79,12 @@ namespace crocs.lang
         }
 
 
-        public static u16 operator +(u16 a, u16 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < u16.MIN) { throw new Exception("underflow!"); }
-            if (value > u16.MAX) { throw new Exception("overflow!");  }
-            u16 result = (ushort)value;
-            return result;
-        }public static i32 operator +(u16 a, i32 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < i32.MIN) { throw new Exception("underflow!"); }
-            if (value > i32.MAX) { throw new Exception("overflow!");  }
-            i32 result = (int)value;
-            return result;
-        }public static i64 operator +(u16 a, i64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            i64 result = (long)value;
-            return result;
-        }public static u32 operator +(u16 a, u32 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < u32.MIN) { throw new Exception("underflow!"); }
-            if (value > u32.MAX) { throw new Exception("overflow!");  }
-            u32 result = (uint)value;
-            return result;
-        }public static u64 operator +(u16 a, u64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            u64 result = (ulong)value;
-            return result;
-        }
+                public static u16 operator +(u16 a, u16 b)  => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
+        public static i32 operator +(u16 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(u16 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static u32 operator +(u16 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
+        public static u64 operator +(u16 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
+
 
 
 

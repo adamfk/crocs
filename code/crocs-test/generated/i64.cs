@@ -92,13 +92,8 @@ namespace crocs.lang
         }
 
 
-        public static i64 operator +(i64 a, i64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            i64 result = (long)value;
-            return result;
-        }
+                public static i64 operator +(i64 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+
 
 
 

@@ -83,20 +83,9 @@ namespace crocs.lang
         }
 
 
-        public static i32 operator +(i32 a, i32 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < i32.MIN) { throw new Exception("underflow!"); }
-            if (value > i32.MAX) { throw new Exception("overflow!");  }
-            i32 result = (int)value;
-            return result;
-        }public static i64 operator +(i32 a, i64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            i64 result = (long)value;
-            return result;
-        }
+                public static i32 operator +(i32 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(i32 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+
 
 
 

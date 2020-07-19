@@ -92,13 +92,8 @@ namespace crocs.lang
         }
 
 
-        public static u64 operator +(u64 a, u64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            u64 result = (ulong)value;
-            return result;
-        }
+                public static u64 operator +(u64 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
+
 
 
 

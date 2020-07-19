@@ -73,54 +73,14 @@ namespace crocs.lang
         }
 
 
-        public static u8 operator +(u8 a, u8 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < u8.MIN) { throw new Exception("underflow!"); }
-            if (value > u8.MAX) { throw new Exception("overflow!");  }
-            u8 result = (byte)value;
-            return result;
-        }public static i16 operator +(u8 a, i16 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < i16.MIN) { throw new Exception("underflow!"); }
-            if (value > i16.MAX) { throw new Exception("overflow!");  }
-            i16 result = (short)value;
-            return result;
-        }public static i32 operator +(u8 a, i32 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < i32.MIN) { throw new Exception("underflow!"); }
-            if (value > i32.MAX) { throw new Exception("overflow!");  }
-            i32 result = (int)value;
-            return result;
-        }public static i64 operator +(u8 a, i64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            i64 result = (long)value;
-            return result;
-        }public static u16 operator +(u8 a, u16 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < u16.MIN) { throw new Exception("underflow!"); }
-            if (value > u16.MAX) { throw new Exception("overflow!");  }
-            u16 result = (ushort)value;
-            return result;
-        }public static u32 operator +(u8 a, u32 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            if (value < u32.MIN) { throw new Exception("underflow!"); }
-            if (value > u32.MAX) { throw new Exception("overflow!");  }
-            u32 result = (uint)value;
-            return result;
-        }public static u64 operator +(u8 a, u64 b)
-        {
-            var value = (decimal)a + (decimal)b;
-            
-            u64 result = (ulong)value;
-            return result;
-        }
+                public static u8 operator +(u8 a, u8 b)  => Numerics.convert_to_u8_ort((decimal)a + (decimal)b);
+        public static i16 operator +(u8 a, i16 b)  => Numerics.convert_to_i16_ort((decimal)a + (decimal)b);
+        public static i32 operator +(u8 a, i32 b)  => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
+        public static i64 operator +(u8 a, i64 b)  => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static u16 operator +(u8 a, u16 b)  => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
+        public static u32 operator +(u8 a, u32 b)  => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
+        public static u64 operator +(u8 a, u64 b)  => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
+
 
 
 
