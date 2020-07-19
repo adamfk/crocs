@@ -7,7 +7,7 @@ using crocs.lang;
 
 namespace crocs.lang
 {
-    public struct i8 : ICrocsObj
+    public struct i8 : ICrocsObj, IHasI8
     {
         private bool _destructed;
 

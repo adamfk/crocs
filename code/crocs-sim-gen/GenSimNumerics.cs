@@ -95,7 +95,7 @@ using crocs.lang;
 
 namespace crocs.lang
 {{
-    public struct {typeInfo.crocs_name} : ICrocsObj
+    public struct {typeInfo.crocs_name} : ICrocsObj, IHas{typeInfo.crocs_name.ToUpper()}
     {{
         private bool _destructed;
 
@@ -169,26 +169,18 @@ namespace crocs.lang
             result += GenOverflowingOperator(classType, classType.crocs_name, classType, op);
 
             //for mixing signed and unsigned
-            //foreach (var otherType in types)
-            //{
-            //    if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
+            foreach (var otherType in types)
+            {
+                if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
 
-            //    TypeInfo resultType = classType.GetResultType(otherType);
-            //    if (resultType.width > 64) continue;
+                TypeInfo resultType = classType.GetResultType(otherType);
+                if (resultType.width > 64) continue;
 
-            //    if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
-            //    {
-            //        result += GenOverflowingOperator(classType, "IHas" + otherType.memory_name.ToUpper(), resultType, op, otherValueGetter: $"b");
-            //    }
-            //}
-
-            //foreach (var otherType in types)
-            //{
-            //    TypeInfo resultType = classType.GetResultType(otherType);
-            //    if (resultType.width > 64) continue;
-
-            //    result += GenOverflowingOperator(classType, otherType.memory_name, resultType, op);
-            //}
+                if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
+                {
+                    result += GenOverflowingOperator(classType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
+                }
+            }
 
             //{ i32 result = i16 + 65534; Assert.Equal<int>(65535, result); }
             foreach (var otherType in types)
@@ -196,7 +188,7 @@ namespace crocs.lang
                 TypeInfo resultType = classType.GetResultType(otherType);
                 if (resultType.width > 64) continue;
                 if (resultType.width <= classType.width) continue;
-                if (classType.CanPromoteTo(otherType))
+                if (classType.CanPromoteTo(otherType) && classType.is_signed == otherType.is_signed)
                 {
                     result += GenOverflowingOperator(classType, otherType.crocs_name, resultType, op);
                 }
@@ -205,9 +197,9 @@ namespace crocs.lang
             return result;
         }
 
-        private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = null)
+        private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = "b")
         {
-            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal)b);\n";
+            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal){otherValueGetter});\n";
         }
 
         private static string GenComparisonOperator(TypeInfo classType, string op)

@@ -12,6 +12,16 @@ using i8_psi = System.SByte;
 
 namespace crocs.lang
 {
+    ////these are needed to avoid implicit conversion confusions when mixing signed and unsigned.
+    public interface IHasU8  { }
+    public interface IHasU16 { }
+    public interface IHasU32 { }
+    public interface IHasU64 { }
+    public interface IHasI8  { }
+    public interface IHasI16 { }
+    public interface IHasI32 { }
+    public interface IHasI64 { }
+
     public class Numerics
     {
         public static bool object_equals_number(object obj, decimal value) {

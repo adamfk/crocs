@@ -7,7 +7,7 @@ using crocs.lang;
 
 namespace crocs.lang
 {
-    public struct u16 : ICrocsObj
+    public struct u16 : ICrocsObj, IHasU16
     {
         private bool _destructed;
 
@@ -68,8 +68,8 @@ namespace crocs.lang
 
         //overflowing operators
         public static u16 operator +(u16 a, u16 b) => Numerics.convert_to_u16_ort((decimal)a + (decimal)b);
-        public static i32 operator +(u16 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
-        public static i64 operator +(u16 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static i32 operator +(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)(i8)b);
+        public static i32 operator +(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)(i16)b);
         public static u32 operator +(u16 a, u32 b) => Numerics.convert_to_u32_ort((decimal)a + (decimal)b);
         public static u64 operator +(u16 a, u64 b) => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
         //TODO add more operators
