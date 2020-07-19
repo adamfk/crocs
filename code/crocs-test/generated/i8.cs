@@ -49,15 +49,7 @@ namespace crocs.lang
         public static implicit operator i64(i8 num) { return num._value; }
 
         public u8 as_u8_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > u8.MAX || v < u8.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for u8");
-                }
-                return (byte)vv;
-            }
+            get => Numerics.convert_to_u8_ort(_value);
         }
 
         public u8 wrap_to_u8 => unchecked((byte)_value);

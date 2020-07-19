@@ -10,6 +10,85 @@ using Xunit;
 
 using i8_psi = System.SByte;
 
+namespace crocs.lang
+{
+    public class Numerics
+    {
+        public static u64 convert_to_u64_ort(decimal value)
+        {
+            if (value > u64.MAX || value < u64.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u64");
+            }
+            return (ulong)value;
+        }
+
+        public static i64 convert_to_i64_ort(decimal value)
+        {
+            if (value > i64.MAX || value < i64.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i64");
+            }
+            return (long)value;
+        }
+
+        public static i32 convert_to_i32_ort(decimal value)
+        {
+            if (value > i32.MAX || value < i32.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i32");
+            }
+            return (int)value;
+        }
+
+        public static u32 convert_to_u32_ort(decimal value)
+        {
+            if (value > u32.MAX || value < u32.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u32");
+            }
+            return (uint)value;
+        }
+
+        public static i16 convert_to_i16_ort(decimal value)
+        {
+            if (value > i16.MAX || value < i16.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i16");
+            }
+            return (short)value;
+        }
+
+        public static u16 convert_to_u16_ort(decimal value)
+        {
+            if (value > u16.MAX || value < u16.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u16");
+            }
+            return (ushort)value;
+        }
+
+        public static i8 convert_to_i8_ort(decimal value)
+        {
+            if (value > i8.MAX || value < i8.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i8");
+            }
+            return (sbyte)value;
+        }
+
+        public static u8 convert_to_u8_ort(decimal value)
+        {
+            if (value > u8.MAX || value < u8.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u8");
+            }
+            return (byte)value;
+        }
+
+    }
+}
+
 namespace numerics_test
 {
     public class Test

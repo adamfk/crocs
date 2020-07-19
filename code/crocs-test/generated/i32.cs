@@ -45,63 +45,23 @@ namespace crocs.lang
         public static implicit operator i64(i32 num) { return num._value; }
 
         public u32 as_u32_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > u32.MAX || v < u32.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for u32");
-                }
-                return (uint)vv;
-            }
+            get => Numerics.convert_to_u32_ort(_value);
         }
 
         public i16 as_i16_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > i16.MAX || v < i16.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for i16");
-                }
-                return (short)vv;
-            }
+            get => Numerics.convert_to_i16_ort(_value);
         }
 
         public u16 as_u16_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > u16.MAX || v < u16.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for u16");
-                }
-                return (ushort)vv;
-            }
+            get => Numerics.convert_to_u16_ort(_value);
         }
 
         public i8 as_i8_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > i8.MAX || v < i8.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for i8");
-                }
-                return (sbyte)vv;
-            }
+            get => Numerics.convert_to_i8_ort(_value);
         }
 
         public u8 as_u8_ort {
-            get {
-                var vv = _value;
-                decimal v = vv;
-                if (v > u8.MAX || v < u8.MIN)
-                {
-                    throw new System.OverflowException("value " + vv + " too large for u8");
-                }
-                return (byte)vv;
-            }
+            get => Numerics.convert_to_u8_ort(_value);
         }
 
         public u32 wrap_to_u32 => unchecked((uint)_value);
