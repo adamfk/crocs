@@ -57,13 +57,4 @@ namespace crocs_test
             return s3;  //still bad! need code rule to catch this kind of thing.
         }
     }
-
-    public class UnitTest1
-    {
-        [Fact]
-        public void Test1()
-        {
-            
-        }
-    }
 }

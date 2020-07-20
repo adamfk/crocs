@@ -149,6 +149,10 @@ namespace numerics_test
 
             //for now, we let crocs ints to be promoted to c# primitive `int` for this comparison
             { u8 u8 = 127; i8 i8 = 127; Assert.True(u8 == i8); }
+
+            { short a = 34; short b = 12; var c = a | b; Assert.IsType<int>(c); }
+
+            { i16 a = 34; i16 b = 12; var c = a - b; Assert.IsType<i16>(c); Assert.Equal<i16>(22, c); }
         }
     }
 }

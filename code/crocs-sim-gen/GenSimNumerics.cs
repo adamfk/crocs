@@ -29,7 +29,11 @@ namespace crocs_sim
         [Fact]
         public void OutputNumericsMethods()
         {
-            File.WriteAllText(dir_path + "numerics_methods.txt", BuildConvertToTypeOrtFunctions());
+            bool manually_output_file = false;
+            if (manually_output_file)
+            {
+                File.WriteAllText(dir_path + "numerics_methods.txt", BuildConvertToTypeOrtFunctions());
+            }
         }
 
         public string BuildConvertToTypeOrtFunctions()
@@ -145,7 +149,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //overflowing operators
-        { GenOverflowingOperator(typeInfo, "+").Trim() }
+        { GenOverflowingOperators(typeInfo).Trim() }
         //TODO add more operators
 
         public override string ToString() => _value.ToString();
@@ -161,12 +165,31 @@ namespace crocs.lang
             return template;
         }
 
+        private static string GenOverflowingOperators(TypeInfo classType)
+        {
+            var output = "";
+            var operators = new string[] { "+","-","*","/", "%", };
+
+            //TODO implement non overflowing operators: "&", "|"
+
+            //TODO implment shifts
+            // note error when trying to implement normally: The first operand of an overloaded shift operator must have the same type as the containing type, and the type of the second operand must be int
+            // have to implement like this: i8 operator <<(i8 a, int b)
+
+            foreach (var op in operators)
+            {
+                output += GenOverflowingOperator(classType, op);
+            }
+
+            return output;
+        }
+
 
         private static string GenOverflowingOperator(TypeInfo classType, string op)
         {
             var result = "";
 
-            result += GenOverflowingOperator(classType, classType.crocs_name, classType, op);
+            result += GenOverflowingOperator(classType, classType, null, classType, op);
 
             //for mixing signed and unsigned
             // See https://github.com/adamfk/crocs/issues/12 specifically for IHas
@@ -179,7 +202,7 @@ namespace crocs.lang
 
                 if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
                 {
-                    result += GenOverflowingOperator(classType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
+                    result += GenOverflowingOperator(classType, otherType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
                 }
             }
 
@@ -191,16 +214,22 @@ namespace crocs.lang
                 if (resultType.width <= classType.width) continue;
                 if (classType.CanPromoteTo(otherType) && classType.is_signed == otherType.is_signed)
                 {
-                    result += GenOverflowingOperator(classType, otherType.crocs_name, resultType, op);
+                    result += GenOverflowingOperator(classType, otherType, null, resultType, op);
                 }
             }
 
             return result;
         }
 
-        private static string GenOverflowingOperator(TypeInfo classType, string otherTypeName, TypeInfo resultType, string op, string otherValueGetter = "b")
+        private static string GenOverflowingOperator(TypeInfo aCrocsType, TypeInfo bCrocsType, string bTypeName, TypeInfo resultType, string op, string otherValueGetter = "b")
         {
-            return $"        public static {resultType.crocs_name} operator {op}({classType.crocs_name} a, {otherTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort((decimal)a + (decimal){otherValueGetter});\n";
+            var aBackingType = aCrocsType.GetBackingTypeName();
+            var bBackingType = bCrocsType.GetBackingTypeName();
+            if (bTypeName == null)
+            {
+                bTypeName = bCrocsType.crocs_name;
+            }
+            return $"        public static {resultType.crocs_name} operator {op}({aCrocsType.crocs_name} a, {bTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort(({aBackingType})a {op} ({bBackingType}){otherValueGetter});\n";
         }
 
         private static string GenComparisonOperator(TypeInfo classType, string op)

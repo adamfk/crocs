@@ -65,8 +65,16 @@ namespace crocs.lang
         //TODO add more operators
 
         //overflowing operators
-        public static i32 operator +(i32 a, i32 b) => Numerics.convert_to_i32_ort((decimal)a + (decimal)b);
-        public static i64 operator +(i32 a, i64 b) => Numerics.convert_to_i64_ort((decimal)a + (decimal)b);
+        public static i32 operator +(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a + (int)b);
+        public static i64 operator +(i32 a, i64 b) => Numerics.convert_to_i64_ort((int)a + (long)b);
+        public static i32 operator -(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a - (int)b);
+        public static i64 operator -(i32 a, i64 b) => Numerics.convert_to_i64_ort((int)a - (long)b);
+        public static i32 operator *(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a * (int)b);
+        public static i64 operator *(i32 a, i64 b) => Numerics.convert_to_i64_ort((int)a * (long)b);
+        public static i32 operator /(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a / (int)b);
+        public static i64 operator /(i32 a, i64 b) => Numerics.convert_to_i64_ort((int)a / (long)b);
+        public static i32 operator %(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a % (int)b);
+        public static i64 operator %(i32 a, i64 b) => Numerics.convert_to_i64_ort((int)a % (long)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

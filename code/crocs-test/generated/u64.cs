@@ -69,7 +69,11 @@ namespace crocs.lang
         //TODO add more operators
 
         //overflowing operators
-        public static u64 operator +(u64 a, u64 b) => Numerics.convert_to_u64_ort((decimal)a + (decimal)b);
+        public static u64 operator +(u64 a, u64 b) => Numerics.convert_to_u64_ort((ulong)a + (ulong)b);
+        public static u64 operator -(u64 a, u64 b) => Numerics.convert_to_u64_ort((ulong)a - (ulong)b);
+        public static u64 operator *(u64 a, u64 b) => Numerics.convert_to_u64_ort((ulong)a * (ulong)b);
+        public static u64 operator /(u64 a, u64 b) => Numerics.convert_to_u64_ort((ulong)a / (ulong)b);
+        public static u64 operator %(u64 a, u64 b) => Numerics.convert_to_u64_ort((ulong)a % (ulong)b);
         //TODO add more operators
 
         public override string ToString() => _value.ToString();

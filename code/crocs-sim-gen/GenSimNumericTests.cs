@@ -11,8 +11,20 @@ namespace crocs_sim
 {
     public class GenSimNumericTests
     {
+        private const string indent = "            ";
         static readonly string dir_path = GenSimNumerics.dir_path;
         static readonly TypeInfo[] types = GenSimNumerics.types;
+        readonly string varTypeOneValueDefinitions = "";    //i8 i8 = 1; i16 i16 = 1; ...
+
+        public GenSimNumericTests()
+        {
+            var varTypeOneValueDefinitions = "";    
+            foreach (var type in types)
+            {
+                varTypeOneValueDefinitions += indent + $"{type.crocs_name} {type.crocs_name} = 1;\n";
+            }
+            this.varTypeOneValueDefinitions = varTypeOneValueDefinitions.Trim();
+        }
 
         [Fact]
         public void GenTests()
@@ -29,7 +41,11 @@ namespace crocs_tests
     {{
         {GenLiteralConversionTest()}
         {GenWindeningConversionTest()}
-        {GenArithmeticTest()}
+        {GenAdditionTests()}
+        {GenSubtractionTests()}
+        {GenMultiplicationTests()}
+        {GenDivisionTests()}
+        {GenModulusTests()}
     }}
 }}
 ";
@@ -40,12 +56,11 @@ namespace crocs_tests
         public string GenLiteralConversionTest()
         {
             var inner = "";
-            var tab = "            ";
             foreach (var type in types)
             {
                 void genInner(decimal value)
                 {
-                    inner += tab + $"{{ {type.crocs_name} n = {value}; Assert.Equal<{type.crocs_name}>({value}, n); }}\n";
+                    inner += indent + $"{{ {type.crocs_name} n = {value}; Assert.Equal<{type.crocs_name}>({value}, n); }}\n";
 
                     var binary = type.ToBinary(value);
                     binary = String.Join("_", ChunksUpto(binary, 4));
@@ -54,7 +69,7 @@ namespace crocs_tests
                     {
                         binary = $"unchecked(({type.GetBackingTypeName()}){binary})";
                     }
-                    inner += tab + $"{{ {type.crocs_name} n = {value}; Assert.Equal<{type.crocs_name}>({binary}, n); }}\n";
+                    inner += indent + $"{{ {type.crocs_name} n = {value}; Assert.Equal<{type.crocs_name}>({binary}, n); }}\n";
                 }
 
                 if (type.is_signed)
@@ -84,14 +99,13 @@ namespace crocs_tests
         public string GenWindeningConversionTest()
         {
             var inner = "";
-            var tab = "            ";
             foreach (var type in types)
             {
                 var widerTypes = GenSimNumerics.GetWideningConversions(type);
 
                 foreach (var widerType in widerTypes)
                 {
-                    inner += tab + $"{{ {type.crocs_name} n = {type.GetMaxValue()}; {widerType.crocs_name} wider = n; Assert.Equal<{widerType.crocs_name}>({type.GetMaxValue()}, wider); Assert.Equal<{widerType.crocs_name}>({type.GetMaxValue()}, wider);}}\n";
+                    inner += indent + $"{{ {type.crocs_name} n = {type.GetMaxValue()}; {widerType.crocs_name} wider = n; Assert.Equal<{widerType.crocs_name}>({type.GetMaxValue()}, wider); Assert.Equal<{widerType.crocs_name}>({type.GetMaxValue()}, wider);}}\n";
                 }
 
                 inner += "\n";
@@ -109,55 +123,172 @@ namespace crocs_tests
             return output;
         }
 
-        public string GenArithmeticTest()
+        public string GenSubtractionTests()
         {
             var inner = "";
-            var pickyInner = "";
-            var tab = "            ";
-            var topDecl = "";
             foreach (var type in types)
             {
-
-                topDecl += tab + $"{type.crocs_name} {type.crocs_name} = 1;\n";
-
                 foreach (var otherType in types)
                 {
                     var resultType = type.GetResultType(otherType);
                     if (resultType.width > 64) continue;
 
-                    //{ i32 result = u16 + i8; Assert.Equal<int>(2, result); }
-                    inner += tab + $"{{ {resultType.crocs_name} result = {type.crocs_name} + {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(2, result); }}\n";
-                    pickyInner += tab + $"{{ var result = {type.crocs_name} + {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(2, result); }}\n";
-
-                    resultType = type.GetResultTypeFromLiteral(otherType.GetMaxValue() - 1);
-
-                    inner += tab + $"{{ {resultType.crocs_name} result = {type.crocs_name} + {otherType.GetMaxValue() - 1}; Assert.Equal<{resultType.crocs_name}>({otherType.GetMaxValue()}, result); }}\n";
-
-                    //{ var result = u16 + i8; Assert.IsType<i32>(result); Assert.Equal<int>(2, result); }
-                    pickyInner += tab + $"{{ var result = {type.crocs_name} + {otherType.GetMaxValue() - 1}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>({otherType.GetMaxValue()}, result); }}\n";
+                    //{ i32 result = u16 - i8; Assert.Equal<i32>(0, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} - {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
+                    //{ var result = u16 - i8; Assert.IsType<i32>(result); Assert.Equal<i32>(0, result); }
+                    inner += indent + $"{{ var result = {type.crocs_name} - {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
+                    inner += indent + $"{{ var result = {type.crocs_name} - 1; Assert.IsType<{type.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
                 }
-
-                inner += "\n";
             }
-            topDecl = topDecl.Trim();
-            inner = inner.Trim();
-            pickyInner = pickyInner.Trim();
 
             var output = $@"
         //NOTE! AUTO GENERATED
         [Fact]
-        public void Arithmetic()
+        public void SubtractionTest()
         {{
-            {topDecl}
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenMultiplicationTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    //{ i32 result = u16 * i8; Assert.Equal<i32>(1, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} * {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                    //{ var result = u16 * i8; Assert.IsType<i32>(result); Assert.Equal<i32>(1, result); }
+                    inner += indent + $"{{ var result = {type.crocs_name} * {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void MultiplicationTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenDivisionTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    //{ i32 result = u16 / i8; Assert.Equal<i32>(1, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} / {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                    //{ var result = u16 / i8; Assert.IsType<i32>(result); Assert.Equal<i32>(1, result); }
+                    inner += indent + $"{{ var result = {type.crocs_name} / {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void DivisionTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenModulusTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    //{ i32 result = u16 % i8; Assert.Equal<i32>(0, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} % {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
+                    //{ var result = u16 % i8; Assert.IsType<i32>(result); Assert.Equal<i32>(0, result); }
+                    inner += indent + $"{{ var result = {type.crocs_name} % {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void ModulusTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenAdditionTests()
+        {
+            //TODO test overflows
+
+            var inner = "";
+            var implicitTestInner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    //{ i32 result = u16 + i8; Assert.Equal<i32>(2, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} + {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(2, result); }}\n";
+                    implicitTestInner += indent + $"{{ var result = {type.crocs_name} + {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(2, result); }}\n";
+
+                    resultType = type.GetResultTypeFromLiteral(otherType.GetMaxValue() - 1);
+
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} + {otherType.GetMaxValue() - 1}; Assert.Equal<{resultType.crocs_name}>({otherType.GetMaxValue()}, result); }}\n";
+
+                    //{ var result = u16 + i8; Assert.IsType<i32>(result); Assert.Equal<int>(2, result); }
+                    implicitTestInner += indent + $"{{ var result = {type.crocs_name} + {otherType.GetMaxValue() - 1}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>({otherType.GetMaxValue()}, result); }}\n";
+                }
+
+                inner += "\n";
+            }
+            inner = inner.Trim();
+            implicitTestInner = implicitTestInner.Trim();
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void AdditionTest()
+        {{
+            {varTypeOneValueDefinitions}
             {inner}
         }}
 
         //NOTE! AUTO GENERATED
         [Fact]
-        public void PickyTypeArithmetic()
+        public void AdditionImplicitTypeTest()
         {{
-            {topDecl}
-            {pickyInner}
+            {varTypeOneValueDefinitions}
+            {implicitTestInner}
         }}
 ";
             return output;
