@@ -11,6 +11,8 @@ namespace crocs_sim
 {
     public class GenSimNumerics
     {
+        public delegate void Callback(TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface);
+
         public static readonly string dir_path = @"..\..\..\..\crocs-test\generated\";
         
         public static readonly TypeInfo[] types = {
@@ -166,16 +168,18 @@ namespace crocs.lang
             return template;
         }
 
+        //TODO implment shifts
+        // note error when trying to implement normally: The first operand of an overloaded shift operator must have the same type as the containing type, and the type of the second operand must be int
+        // have to implement like this: i8 operator <<(i8 a, int b)
+
+
+
         private static string GenOverflowingOperators(TypeInfo classType)
         {
             var output = "";
             var operators = new string[] { "+","-","*","/", "%", };
 
             //TODO implement non overflowing operators: "&", "|"
-
-            //TODO implment shifts
-            // note error when trying to implement normally: The first operand of an overloaded shift operator must have the same type as the containing type, and the type of the second operand must be int
-            // have to implement like this: i8 operator <<(i8 a, int b)
 
             foreach (var op in operators)
             {
@@ -186,29 +190,8 @@ namespace crocs.lang
         }
 
 
-        public delegate void Callback(TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface);
 
 
-        private static string GenOverflowingOperator(TypeInfo type, string op)
-        {
-            var result = "";
-
-            Callback callback = (TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface) =>
-            {
-                if (useIHasInterface)
-                {
-                    result += GenOverflowingOperator(currentType, otherType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
-                }
-                else
-                {
-                    result += GenOverflowingOperator(currentType, otherType, null, resultType, op);
-                }
-            };
-
-            CallbackForPromotionCombinations(type, callback);
-
-            return result;
-        }
 
         private static void CallbackForPromotionCombinations(TypeInfo type, Callback callback)
         {
@@ -241,6 +224,27 @@ namespace crocs.lang
                     //result += GenOverflowingOperator(type, otherType, null, resultType, op);
                 }
             }
+        }
+
+        private static string GenOverflowingOperator(TypeInfo type, string op)
+        {
+            var result = "";
+
+            Callback callback = (TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface) =>
+            {
+                if (useIHasInterface)
+                {
+                    result += GenOverflowingOperator(currentType, otherType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
+                }
+                else
+                {
+                    result += GenOverflowingOperator(currentType, otherType, null, resultType, op);
+                }
+            };
+
+            CallbackForPromotionCombinations(type, callback);
+
+            return result;
         }
 
         private static string GenOverflowingOperator(TypeInfo aCrocsType, TypeInfo bCrocsType, string bTypeName, TypeInfo resultType, string op, string otherValueGetter = "b")
