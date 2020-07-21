@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
@@ -185,40 +186,61 @@ namespace crocs.lang
         }
 
 
-        private static string GenOverflowingOperator(TypeInfo classType, string op)
+        public delegate void Callback(TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface);
+
+
+        private static string GenOverflowingOperator(TypeInfo type, string op)
         {
             var result = "";
 
-            result += GenOverflowingOperator(classType, classType, null, classType, op);
+            Callback callback = (TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface) =>
+            {
+                if (useIHasInterface)
+                {
+                    result += GenOverflowingOperator(currentType, otherType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
+                }
+                else
+                {
+                    result += GenOverflowingOperator(currentType, otherType, null, resultType, op);
+                }
+            };
+
+            CallbackForPromotionCombinations(type, callback);
+
+            return result;
+        }
+
+        private static void CallbackForPromotionCombinations(TypeInfo type, Callback callback)
+        {
+            callback(currentType: type, otherType: type, resultType: type, useIHasInterface: false);
 
             //for mixing signed and unsigned
             // See https://github.com/adamfk/crocs/issues/12 specifically for IHas
             foreach (var otherType in types)
             {
-                if (classType.is_signed == otherType.is_signed) continue;    //only care about mixing
+                if (type.is_signed == otherType.is_signed) continue;    //only care about mixing
 
-                TypeInfo resultType = classType.GetResultType(otherType);
+                TypeInfo resultType = type.GetResultType(otherType);
                 if (resultType.width > 64) continue;
 
-                if (classType.is_signed == false && classType.CanPromoteToOrViceVersa(otherType) == false)
+                if (type.is_signed == false && type.CanPromoteToOrViceVersa(otherType) == false)
                 {
-                    result += GenOverflowingOperator(classType, otherType, "IHas" + otherType.crocs_name.ToUpper(), resultType, op, otherValueGetter: $"({otherType.crocs_name})b");
+                    callback(currentType: type, otherType: otherType, resultType: resultType, useIHasInterface: true);
                 }
             }
 
             //{ i32 result = i16 + 65534; Assert.Equal<int>(65535, result); }
             foreach (var otherType in types)
             {
-                TypeInfo resultType = classType.GetResultType(otherType);
+                TypeInfo resultType = type.GetResultType(otherType);
                 if (resultType.width > 64) continue;
-                if (resultType.width <= classType.width) continue;
-                if (classType.CanPromoteTo(otherType) && classType.is_signed == otherType.is_signed)
+                if (resultType.width <= type.width) continue;
+                if (type.CanPromoteTo(otherType) && type.is_signed == otherType.is_signed)
                 {
-                    result += GenOverflowingOperator(classType, otherType, null, resultType, op);
+                    callback(currentType: type, otherType: otherType, resultType: resultType, useIHasInterface: false);
+                    //result += GenOverflowingOperator(type, otherType, null, resultType, op);
                 }
             }
-
-            return result;
         }
 
         private static string GenOverflowingOperator(TypeInfo aCrocsType, TypeInfo bCrocsType, string bTypeName, TypeInfo resultType, string op, string otherValueGetter = "b")
