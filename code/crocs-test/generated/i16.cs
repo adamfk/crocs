@@ -53,9 +53,9 @@ namespace crocs.lang
         public u8 as_u8_ort => Numerics.convert_to_u8_ort(_value);
 
         //wrapping conversions
-        public u16 wrap_to_u16 => unchecked((ushort)_value);
-        public i8 wrap_to_i8 => unchecked((sbyte)_value);
-        public u8 wrap_to_u8 => unchecked((byte)_value);
+        public u16 wrap_to_u16 => Numerics.truncate_to_u16(_value);
+        public i8 wrap_to_i8 => Numerics.truncate_to_i8(_value);
+        public u8 wrap_to_u8 => Numerics.truncate_to_u8(_value);
 
         //comparison operators
         public static bool operator ==(i16 a, i16 b) => (short)a == (short)b;
@@ -79,6 +79,10 @@ namespace crocs.lang
         public static i32 operator %(i16 a, i32 b) => Numerics.convert_to_i32_ort((short)a % (int)b);
         public static i64 operator %(i16 a, i64 b) => Numerics.convert_to_i64_ort((short)a % (long)b);
         //TODO add more operators
+
+        //binary operators (only for unsigned)
+        
+        
 
         public override string ToString() => _value.ToString();
 

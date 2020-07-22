@@ -14,7 +14,7 @@ namespace crocs_sim
         public delegate void Callback(TypeInfo currentType, TypeInfo otherType, TypeInfo resultType, bool useIHasInterface);
 
         public static readonly string dir_path = @"..\..\..\..\crocs-test\generated\";
-        
+
         public static readonly TypeInfo[] types = {
             new TypeInfo("i8"), new TypeInfo("i16"), new TypeInfo("i32"), new TypeInfo("i64"), new TypeInfo("u8"), new TypeInfo("u16"), new TypeInfo("u32"), new TypeInfo("u64"),
         };
@@ -32,7 +32,7 @@ namespace crocs_sim
         [Fact]
         public void OutputNumericsMethods()
         {
-            bool manually_output_file = false;
+            bool manually_output_file = true;
             if (manually_output_file)
             {
                 File.WriteAllText(dir_path + "numerics_methods.txt", BuildConvertToTypeOrtFunctions());
@@ -55,6 +55,45 @@ namespace crocs_sim
                 throw new System.OverflowException(""value "" + value + "" too large for {narrowTypeName}"");
             }}
             return ({type.GetBackingTypeName()})value;
+        }}
+
+        public static {type.crocs_name} truncate_to_{narrowTypeName}(decimal value)
+        {{
+            return unchecked(({type.GetBackingTypeName()})value);
+        }}
+";
+            }
+
+            foreach (var type in types)
+            {
+                if (type.is_signed) { continue; }
+
+                output += $@"
+
+
+
+        // Only throws for invalid shift amounts.
+        public static {type.crocs_name} shift_right_ort({type.crocs_name} value, u32 shift_amount)
+        {{
+            if (shift_amount >= {type.width})
+            {{
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($""can't shift '{{shift_amount}}' by more than width of integer '{type.width}'"");
+            }}
+            return truncate_to_{type.crocs_name}(value >> Numerics.convert_to_i32_ort(shift_amount));
+        }}
+
+        //note will not throw if high bits truncated. Only throws for invalid shift amounts.
+        public static {type.crocs_name} shift_left_ort({type.crocs_name} value, u32 shift_amount)
+        {{
+            if (shift_amount >= {type.width})
+            {{
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($""can't shift '{{shift_amount}}' by more than width of integer '{type.width}'"");
+            }}
+            return truncate_to_{type.crocs_name}(value << Numerics.convert_to_i32_ort(shift_amount));
         }}
 ";
             }
@@ -90,7 +129,7 @@ namespace crocs_sim
                 //TODOLOW don't use decimal types
                 narrowingConversions += $"        public {narrowTypeName} as_{narrowTypeName}_ort => Numerics.convert_to_{narrowTypeName}_ort(_value);\n";
 
-                wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => unchecked(({narrowTypeInfo.GetBackingTypeName()})_value);\n";
+                wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => Numerics.truncate_to_{narrowTypeName}(_value);\n";
             }
 
             var template = $@"
@@ -155,6 +194,10 @@ namespace crocs.lang
         { GenOverflowingOperators(typeInfo).Trim() }
         //TODO add more operators
 
+        //binary operators (only for unsigned)
+        { GenBinaryOperators(typeInfo).Trim() }
+        { GenShiftOperators(typeInfo).Trim() }
+
         public override string ToString() => _value.ToString();
 
         public override int GetHashCode() => _value.GetHashCode();
@@ -168,18 +211,64 @@ namespace crocs.lang
             return template;
         }
 
-        //TODO implment shifts
+        //TODO do all these https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/
+
+        //TODO implement non overflowing operators: "&", "|"
+
+        //TODO INT34-C. Do not shift an expression by a negative number of bits or by greater than or equal to the number of bits that exist in the operand
+
+        // INT13-C. Use bitwise operators only on unsigned operands
+        // https://wiki.sei.cmu.edu/confluence/display/c/INT13-C.+Use+bitwise+operators+only+on+unsigned+operands
+        private static string GenBinaryOperators(TypeInfo type)
+        {
+            var output = "";
+            var operators = new string[] { "|","&","^" };
+
+            //only for unsigned see INT13-C
+            if (type.is_signed)
+            {
+                return output;
+            }
+
+            foreach (var op in operators)
+            {
+                foreach (var otherType in types)
+                {
+                    if (type.width > otherType.width) continue;
+                    if (otherType.is_signed) continue; //only for unsigned see INT13-C
+
+                    output += $"        public static {otherType.crocs_name} operator {op}({type.crocs_name} a, {otherType.crocs_name} b) => ({otherType.crocs_name})(({type.GetBackingTypeName()})a {op} ({otherType.GetBackingTypeName()})b);\n";
+                }
+            }
+            return output;
+        }
+
+        //"In general, shifts should be performed only on unsigned operands."
+        //https://wiki.sei.cmu.edu/confluence/display/c/INT34-C.+Do+not+shift+an+expression+by+a+negative+number+of+bits+or+by+greater+than+or+equal+to+the+number+of+bits+that+exist+in+the+operand
         // note error when trying to implement normally: The first operand of an overloaded shift operator must have the same type as the containing type, and the type of the second operand must be int
         // have to implement like this: i8 operator <<(i8 a, int b)
+        private static string GenShiftOperators(TypeInfo type)
+        {
+            var output = "";
+            var operators = new string[] { "shift_left", "shift_right" };
 
+            //only for unsigned
+            if (type.is_signed)
+            {
+                return output;
+            }
 
+            foreach (var op in operators)
+            {
+                output += $"        public {type.crocs_name} {op}_ort(u32 shift_amount) => Numerics.{op}_ort(this, shift_amount);\n";
+            }
+            return output;
+        }
 
         private static string GenOverflowingOperators(TypeInfo classType)
         {
             var output = "";
-            var operators = new string[] { "+","-","*","/", "%", };
-
-            //TODO implement non overflowing operators: "&", "|"
+            var operators = new string[] { "+","-","*","/","%", };
 
             foreach (var op in operators)
             {
@@ -188,10 +277,6 @@ namespace crocs.lang
 
             return output;
         }
-
-
-
-
 
         private static void CallbackForPromotionCombinations(TypeInfo type, Callback callback)
         {

@@ -54,40 +54,123 @@ namespace crocs.lang
             return obj_value == value;
         }
 
-        public static u64 convert_to_u64_ort(decimal value)
+
+
+
+
+        // Only throws for invalid shift amounts.
+        public static u8 shift_right_ort(u8 value, u32 shift_amount)
         {
-            if (value > u64.MAX || value < u64.MIN)
+            if (shift_amount >= 8)
             {
-                throw new System.OverflowException("value " + value + " too large for u64");
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '8'");
             }
-            return (ulong)value;
+            return truncate_to_u8(value >> Numerics.convert_to_i32_ort(shift_amount));
         }
 
-        public static i64 convert_to_i64_ort(decimal value)
+        //note will not throw if high bits truncated. Only throws for invalid shift amounts.
+        public static u8 shift_left_ort(u8 value, u32 shift_amount)
         {
-            if (value > i64.MAX || value < i64.MIN)
+            if (shift_amount >= 8)
             {
-                throw new System.OverflowException("value " + value + " too large for i64");
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '8'");
             }
-            return (long)value;
+            return truncate_to_u8(value << Numerics.convert_to_i32_ort(shift_amount));
         }
 
-        public static i32 convert_to_i32_ort(decimal value)
+        // Only throws for invalid shift amounts.
+        public static u16 shift_right_ort(u16 value, u32 shift_amount)
         {
-            if (value > i32.MAX || value < i32.MIN)
+            if (shift_amount >= 16)
             {
-                throw new System.OverflowException("value " + value + " too large for i32");
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '16'");
             }
-            return (int)value;
+            return truncate_to_u16(value >> Numerics.convert_to_i32_ort(shift_amount));
         }
 
-        public static u32 convert_to_u32_ort(decimal value)
+        //note will not throw if high bits truncated. Only throws for invalid shift amounts.
+        public static u16 shift_left_ort(u16 value, u32 shift_amount)
         {
-            if (value > u32.MAX || value < u32.MIN)
+            if (shift_amount >= 16)
             {
-                throw new System.OverflowException("value " + value + " too large for u32");
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '16'");
             }
-            return (uint)value;
+            return truncate_to_u16(value << Numerics.convert_to_i32_ort(shift_amount));
+        }
+
+        // Only throws for invalid shift amounts.
+        public static u32 shift_right_ort(u32 value, u32 shift_amount)
+        {
+            if (shift_amount >= 32)
+            {
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '32'");
+            }
+            return truncate_to_u32(value >> Numerics.convert_to_i32_ort(shift_amount));
+        }
+
+        //note will not throw if high bits truncated. Only throws for invalid shift amounts.
+        public static u32 shift_left_ort(u32 value, u32 shift_amount)
+        {
+            if (shift_amount >= 32)
+            {
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '32'");
+            }
+            return truncate_to_u32(value << Numerics.convert_to_i32_ort(shift_amount));
+        }
+
+        // Only throws for invalid shift amounts.
+        public static u64 shift_right_ort(u64 value, u32 shift_amount)
+        {
+            if (shift_amount >= 64)
+            {
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '64'");
+            }
+            return truncate_to_u64(value >> Numerics.convert_to_i32_ort(shift_amount));
+        }
+
+        //note will not throw if high bits truncated. Only throws for invalid shift amounts.
+        public static u64 shift_left_ort(u64 value, u32 shift_amount)
+        {
+            if (shift_amount >= 64)
+            {
+                //TODOLOW consider and refine
+                //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
+                throw new System.OverflowException($"can't shift '{shift_amount}' by more than width of integer '64'");
+            }
+            return truncate_to_u64(value << Numerics.convert_to_i32_ort(shift_amount));
+        }
+
+
+
+
+
+
+        public static i8 convert_to_i8_ort(decimal value)
+        {
+            if (value > i8.MAX || value < i8.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i8");
+            }
+            return (sbyte)value;
+        }
+
+        public static i8 truncate_to_i8(decimal value)
+        {
+            return unchecked((sbyte)value);
         }
 
         public static i16 convert_to_i16_ort(decimal value)
@@ -99,22 +182,37 @@ namespace crocs.lang
             return (short)value;
         }
 
-        public static u16 convert_to_u16_ort(decimal value)
+        public static i16 truncate_to_i16(decimal value)
         {
-            if (value > u16.MAX || value < u16.MIN)
-            {
-                throw new System.OverflowException("value " + value + " too large for u16");
-            }
-            return (ushort)value;
+            return unchecked((short)value);
         }
 
-        public static i8 convert_to_i8_ort(decimal value)
+        public static i32 convert_to_i32_ort(decimal value)
         {
-            if (value > i8.MAX || value < i8.MIN)
+            if (value > i32.MAX || value < i32.MIN)
             {
-                throw new System.OverflowException("value " + value + " too large for i8");
+                throw new System.OverflowException("value " + value + " too large for i32");
             }
-            return (sbyte)value;
+            return (int)value;
+        }
+
+        public static i32 truncate_to_i32(decimal value)
+        {
+            return unchecked((int)value);
+        }
+
+        public static i64 convert_to_i64_ort(decimal value)
+        {
+            if (value > i64.MAX || value < i64.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for i64");
+            }
+            return (long)value;
+        }
+
+        public static i64 truncate_to_i64(decimal value)
+        {
+            return unchecked((long)value);
         }
 
         public static u8 convert_to_u8_ort(decimal value)
@@ -125,6 +223,54 @@ namespace crocs.lang
             }
             return (byte)value;
         }
+
+        public static u8 truncate_to_u8(decimal value)
+        {
+            return unchecked((byte)value);
+        }
+
+        public static u16 convert_to_u16_ort(decimal value)
+        {
+            if (value > u16.MAX || value < u16.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u16");
+            }
+            return (ushort)value;
+        }
+
+        public static u16 truncate_to_u16(decimal value)
+        {
+            return unchecked((ushort)value);
+        }
+
+        public static u32 convert_to_u32_ort(decimal value)
+        {
+            if (value > u32.MAX || value < u32.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u32");
+            }
+            return (uint)value;
+        }
+
+        public static u32 truncate_to_u32(decimal value)
+        {
+            return unchecked((uint)value);
+        }
+
+        public static u64 convert_to_u64_ort(decimal value)
+        {
+            if (value > u64.MAX || value < u64.MIN)
+            {
+                throw new System.OverflowException("value " + value + " too large for u64");
+            }
+            return (ulong)value;
+        }
+
+        public static u64 truncate_to_u64(decimal value)
+        {
+            return unchecked((ulong)value);
+        }
+
 
     }
 }
@@ -151,6 +297,7 @@ namespace numerics_test
             { u8 u8 = 127; i8 i8 = 127; Assert.True(u8 == i8); }
 
             { short a = 34; short b = 12; var c = a | b; Assert.IsType<int>(c); }
+            { uint a = 34; int b = 12; var c = a | b; Assert.IsType<int>(c); }
 
             { i16 a = 34; i16 b = 12; var c = a - b; Assert.IsType<i16>(c); Assert.Equal<i16>(22, c); }
         }

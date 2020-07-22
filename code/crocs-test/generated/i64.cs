@@ -55,13 +55,13 @@ namespace crocs.lang
         public u8 as_u8_ort => Numerics.convert_to_u8_ort(_value);
 
         //wrapping conversions
-        public u64 wrap_to_u64 => unchecked((ulong)_value);
-        public i32 wrap_to_i32 => unchecked((int)_value);
-        public u32 wrap_to_u32 => unchecked((uint)_value);
-        public i16 wrap_to_i16 => unchecked((short)_value);
-        public u16 wrap_to_u16 => unchecked((ushort)_value);
-        public i8 wrap_to_i8 => unchecked((sbyte)_value);
-        public u8 wrap_to_u8 => unchecked((byte)_value);
+        public u64 wrap_to_u64 => Numerics.truncate_to_u64(_value);
+        public i32 wrap_to_i32 => Numerics.truncate_to_i32(_value);
+        public u32 wrap_to_u32 => Numerics.truncate_to_u32(_value);
+        public i16 wrap_to_i16 => Numerics.truncate_to_i16(_value);
+        public u16 wrap_to_u16 => Numerics.truncate_to_u16(_value);
+        public i8 wrap_to_i8 => Numerics.truncate_to_i8(_value);
+        public u8 wrap_to_u8 => Numerics.truncate_to_u8(_value);
 
         //comparison operators
         public static bool operator ==(i64 a, i64 b) => (long)a == (long)b;
@@ -75,6 +75,10 @@ namespace crocs.lang
         public static i64 operator /(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a / (long)b);
         public static i64 operator %(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a % (long)b);
         //TODO add more operators
+
+        //binary operators (only for unsigned)
+        
+        
 
         public override string ToString() => _value.ToString();
 
