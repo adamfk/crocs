@@ -62,7 +62,9 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(i32 a, i32 b) => (int)a == (int)b;
         public static bool operator !=(i32 a, i32 b) => (int)a != (int)b;
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         public static i32 operator +(i32 a, i32 b) => Numerics.convert_to_i32_ort((int)a + (int)b);
@@ -78,6 +80,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //binary operators (only for unsigned)
+        
         
         
 

@@ -188,7 +188,9 @@ namespace crocs.lang
         //comparison operators
         { GenComparisonOperator(typeInfo, "==") }
         { GenComparisonOperator(typeInfo, "!=") }
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         { GenOverflowingOperators(typeInfo).Trim() }
@@ -197,6 +199,7 @@ namespace crocs.lang
         //binary operators (only for unsigned)
         { GenBinaryOperators(typeInfo).Trim() }
         { GenShiftOperators(typeInfo).Trim() }
+        { GenBinaryInversion(typeInfo).Trim() }
 
         public override string ToString() => _value.ToString();
 
@@ -211,9 +214,8 @@ namespace crocs.lang
             return template;
         }
 
-        //TODO do all these https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/
-
-        //TODO implement non overflowing operators: "&", "|"
+        //TODO do all these https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/operator-overloading
+        // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/
 
         //TODO INT34-C. Do not shift an expression by a negative number of bits or by greater than or equal to the number of bits that exist in the operand
 
@@ -261,6 +263,24 @@ namespace crocs.lang
             foreach (var op in operators)
             {
                 output += $"        public {type.crocs_name} {op}_ort(u32 shift_amount) => Numerics.{op}_ort(this, shift_amount);\n";
+            }
+            return output;
+        }
+
+        private static string GenBinaryInversion(TypeInfo type)
+        {
+            var output = "";
+            var operators = new string[] { "~" };
+
+            //only for unsigned
+            if (type.is_signed)
+            {
+                return output;
+            }
+
+            foreach (var op in operators)
+            {
+                output += $"        public static {type.crocs_name} operator {op}({type.crocs_name} a) => ({type.crocs_name})(~({type.GetBackingTypeName()})a);\n";
             }
             return output;
         }

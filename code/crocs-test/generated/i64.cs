@@ -66,7 +66,9 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(i64 a, i64 b) => (long)a == (long)b;
         public static bool operator !=(i64 a, i64 b) => (long)a != (long)b;
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         public static i64 operator +(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a + (long)b);
@@ -77,6 +79,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //binary operators (only for unsigned)
+        
         
         
 

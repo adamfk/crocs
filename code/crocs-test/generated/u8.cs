@@ -64,7 +64,9 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(u8 a, u8 b) => (byte)a == (byte)b;
         public static bool operator !=(u8 a, u8 b) => (byte)a != (byte)b;
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         public static u8 operator +(u8 a, u8 b) => Numerics.convert_to_u8_ort((byte)a + (byte)b);
@@ -109,6 +111,7 @@ namespace crocs.lang
         public static u64 operator ^(u8 a, u64 b) => (u64)((byte)a ^ (ulong)b);
         public u8 shift_left_ort(u32 shift_amount) => Numerics.shift_left_ort(this, shift_amount);
         public u8 shift_right_ort(u32 shift_amount) => Numerics.shift_right_ort(this, shift_amount);
+        public static u8 operator ~(u8 a) => (u8)(~(byte)a);
 
         public override string ToString() => _value.ToString();
 

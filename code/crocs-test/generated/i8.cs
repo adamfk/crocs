@@ -58,7 +58,9 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(i8 a, i8 b) => (sbyte)a == (sbyte)b;
         public static bool operator !=(i8 a, i8 b) => (sbyte)a != (sbyte)b;
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         public static i8 operator +(i8 a, i8 b) => Numerics.convert_to_i8_ort((sbyte)a + (sbyte)b);
@@ -84,6 +86,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //binary operators (only for unsigned)
+        
         
         
 

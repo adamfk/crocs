@@ -60,7 +60,9 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(i16 a, i16 b) => (short)a == (short)b;
         public static bool operator !=(i16 a, i16 b) => (short)a != (short)b;
-        //TODO add more operators
+        //rest of comparisons automatically done via implicit conversions to c# integer types
+        //< and > operators
+        //<= and >= operators
 
         //overflowing operators
         public static i16 operator +(i16 a, i16 b) => Numerics.convert_to_i16_ort((short)a + (short)b);
@@ -81,6 +83,7 @@ namespace crocs.lang
         //TODO add more operators
 
         //binary operators (only for unsigned)
+        
         
         
 
