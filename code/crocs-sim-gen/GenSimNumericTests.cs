@@ -47,12 +47,13 @@ namespace crocs_tests
         {GenDivisionTests()}
         {GenModulusTests()}
         {GenBinaryOrTests()}
+        {GenBinaryAndTests()}
+        { GenBinaryXorTests()}
     }}
 }}
 ";
 
-            //{ GenBinaryAndTests()}
-            //{ GenBinaryXorTests()}
+            //
             //{ GenBinaryShiftLeftTests()}
             //{ GenBinaryShiftRightTests()}
             //{ GenBinaryInversionTests()}
@@ -278,6 +279,72 @@ namespace crocs_tests
         //NOTE! AUTO GENERATED
         [Fact]
         public void BinaryOrTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenBinaryAndTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                if (type.is_signed) continue;
+
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+                    if (resultType.is_signed) continue;
+
+                    inner += indent + $"{{ {type.crocs_name} result = {type.crocs_name} & 0b0011; Assert.Equal<{type.crocs_name}>(0b0001, result); }}\n";
+                    inner += indent + $"{{ {otherType.crocs_name} b = 0b1111; {resultType.crocs_name} result = {type.crocs_name} & b; Assert.Equal<{resultType.crocs_name}>(0b0001, result); }}\n";
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} & {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(0b0001, result); }}\n";
+                    inner += indent + $"{{ var result = {type.crocs_name} & {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryAndTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenBinaryXorTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                if (type.is_signed) continue;
+
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+                    if (resultType.is_signed) continue;
+
+                    inner += indent + $"{{ {type.crocs_name} result = {type.crocs_name} ^ 0b0011; Assert.Equal<{type.crocs_name}>(0b0010, result); }}\n";
+                    inner += indent + $"{{ {otherType.crocs_name} b = 0b1111; {resultType.crocs_name} result = {type.crocs_name} ^ b; Assert.Equal<{resultType.crocs_name}>(0b1110, result); }}\n";
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} ^ {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(0b0000, result); }}\n";
+                    inner += indent + $"{{ var result = {type.crocs_name} ^ {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(0, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryXorTest()
         {{
             {varTypeOneValueDefinitions}
             {inner.Trim()}
