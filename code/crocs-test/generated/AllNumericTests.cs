@@ -933,5 +933,82 @@ namespace crocs_tests
             { u64 result = u64 % u64; Assert.Equal<u64>(0, result); }
             { var result = u64 % u64; Assert.IsType<u64>(result); Assert.Equal<u64>(0, result); }
         }
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryOrTest()
+        {
+            i8 i8 = 1;
+            i16 i16 = 1;
+            i32 i32 = 1;
+            i64 i64 = 1;
+            u8 u8 = 1;
+            u16 u16 = 1;
+            u32 u32 = 1;
+            u64 u64 = 1;
+            { u8 result = u8 | 0b0010; Assert.Equal<u8>(0b0011, result); }
+            { u8 b = 0b1100; u8 result = u8 | b; Assert.Equal<u8>(0b1101, result); }
+            { u8 result = u8 | u8; Assert.Equal<u8>(0b0001, result); }
+            { var result = u8 | u8; Assert.IsType<u8>(result); Assert.Equal<u8>(1, result); }
+            { u8 result = u8 | 0b0010; Assert.Equal<u8>(0b0011, result); }
+            { u16 b = 0b1100; u16 result = u8 | b; Assert.Equal<u16>(0b1101, result); }
+            { u16 result = u8 | u16; Assert.Equal<u16>(0b0001, result); }
+            { var result = u8 | u16; Assert.IsType<u16>(result); Assert.Equal<u16>(1, result); }
+            { u8 result = u8 | 0b0010; Assert.Equal<u8>(0b0011, result); }
+            { u32 b = 0b1100; u32 result = u8 | b; Assert.Equal<u32>(0b1101, result); }
+            { u32 result = u8 | u32; Assert.Equal<u32>(0b0001, result); }
+            { var result = u8 | u32; Assert.IsType<u32>(result); Assert.Equal<u32>(1, result); }
+            { u8 result = u8 | 0b0010; Assert.Equal<u8>(0b0011, result); }
+            { u64 b = 0b1100; u64 result = u8 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u8 | u64; Assert.Equal<u64>(0b0001, result); }
+            { var result = u8 | u64; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u16 result = u16 | 0b0010; Assert.Equal<u16>(0b0011, result); }
+            { u8 b = 0b1100; u16 result = u16 | b; Assert.Equal<u16>(0b1101, result); }
+            { u16 result = u16 | u8; Assert.Equal<u16>(0b0001, result); }
+            { var result = u16 | u8; Assert.IsType<u16>(result); Assert.Equal<u16>(1, result); }
+            { u16 result = u16 | 0b0010; Assert.Equal<u16>(0b0011, result); }
+            { u16 b = 0b1100; u16 result = u16 | b; Assert.Equal<u16>(0b1101, result); }
+            { u16 result = u16 | u16; Assert.Equal<u16>(0b0001, result); }
+            { var result = u16 | u16; Assert.IsType<u16>(result); Assert.Equal<u16>(1, result); }
+            { u16 result = u16 | 0b0010; Assert.Equal<u16>(0b0011, result); }
+            { u32 b = 0b1100; u32 result = u16 | b; Assert.Equal<u32>(0b1101, result); }
+            { u32 result = u16 | u32; Assert.Equal<u32>(0b0001, result); }
+            { var result = u16 | u32; Assert.IsType<u32>(result); Assert.Equal<u32>(1, result); }
+            { u16 result = u16 | 0b0010; Assert.Equal<u16>(0b0011, result); }
+            { u64 b = 0b1100; u64 result = u16 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u16 | u64; Assert.Equal<u64>(0b0001, result); }
+            { var result = u16 | u64; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u32 result = u32 | 0b0010; Assert.Equal<u32>(0b0011, result); }
+            { u8 b = 0b1100; u32 result = u32 | b; Assert.Equal<u32>(0b1101, result); }
+            { u32 result = u32 | u8; Assert.Equal<u32>(0b0001, result); }
+            { var result = u32 | u8; Assert.IsType<u32>(result); Assert.Equal<u32>(1, result); }
+            { u32 result = u32 | 0b0010; Assert.Equal<u32>(0b0011, result); }
+            { u16 b = 0b1100; u32 result = u32 | b; Assert.Equal<u32>(0b1101, result); }
+            { u32 result = u32 | u16; Assert.Equal<u32>(0b0001, result); }
+            { var result = u32 | u16; Assert.IsType<u32>(result); Assert.Equal<u32>(1, result); }
+            { u32 result = u32 | 0b0010; Assert.Equal<u32>(0b0011, result); }
+            { u32 b = 0b1100; u32 result = u32 | b; Assert.Equal<u32>(0b1101, result); }
+            { u32 result = u32 | u32; Assert.Equal<u32>(0b0001, result); }
+            { var result = u32 | u32; Assert.IsType<u32>(result); Assert.Equal<u32>(1, result); }
+            { u32 result = u32 | 0b0010; Assert.Equal<u32>(0b0011, result); }
+            { u64 b = 0b1100; u64 result = u32 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u32 | u64; Assert.Equal<u64>(0b0001, result); }
+            { var result = u32 | u64; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u64 result = u64 | 0b0010; Assert.Equal<u64>(0b0011, result); }
+            { u8 b = 0b1100; u64 result = u64 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u64 | u8; Assert.Equal<u64>(0b0001, result); }
+            { var result = u64 | u8; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u64 result = u64 | 0b0010; Assert.Equal<u64>(0b0011, result); }
+            { u16 b = 0b1100; u64 result = u64 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u64 | u16; Assert.Equal<u64>(0b0001, result); }
+            { var result = u64 | u16; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u64 result = u64 | 0b0010; Assert.Equal<u64>(0b0011, result); }
+            { u32 b = 0b1100; u64 result = u64 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u64 | u32; Assert.Equal<u64>(0b0001, result); }
+            { var result = u64 | u32; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+            { u64 result = u64 | 0b0010; Assert.Equal<u64>(0b0011, result); }
+            { u64 b = 0b1100; u64 result = u64 | b; Assert.Equal<u64>(0b1101, result); }
+            { u64 result = u64 | u64; Assert.Equal<u64>(0b0001, result); }
+            { var result = u64 | u64; Assert.IsType<u64>(result); Assert.Equal<u64>(1, result); }
+        }
     }
 }

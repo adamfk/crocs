@@ -46,9 +46,16 @@ namespace crocs_tests
         {GenMultiplicationTests()}
         {GenDivisionTests()}
         {GenModulusTests()}
+        {GenBinaryOrTests()}
     }}
 }}
 ";
+
+            //{ GenBinaryAndTests()}
+            //{ GenBinaryXorTests()}
+            //{ GenBinaryShiftLeftTests()}
+            //{ GenBinaryShiftRightTests()}
+            //{ GenBinaryInversionTests()}
 
             File.WriteAllText(dir_path + "AllNumericTests.cs", output);
         }
@@ -235,6 +242,42 @@ namespace crocs_tests
         //NOTE! AUTO GENERATED
         [Fact]
         public void ModulusTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        //GenBinaryOrTests
+        public string GenBinaryOrTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                if (type.is_signed) continue;
+
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+                    if (resultType.is_signed) continue;
+
+                    //{ u16 result = u16 | 0b0010; Assert.Equal<u16>(0b0011, result); }
+                    inner += indent + $"{{ {type.crocs_name} result = {type.crocs_name} | 0b0010; Assert.Equal<{type.crocs_name}>(0b0011, result); }}\n";
+                    inner += indent + $"{{ {otherType.crocs_name} b = 0b1100; {resultType.crocs_name} result = {type.crocs_name} | b; Assert.Equal<{resultType.crocs_name}>(0b1101, result); }}\n";
+                    //{ u32 result = u16 | u32; Assert.Equal<u32>(0b0001, result); }
+                    inner += indent + $"{{ {resultType.crocs_name} result = {type.crocs_name} | {otherType.crocs_name}; Assert.Equal<{resultType.crocs_name}>(0b0001, result); }}\n";
+                    inner += indent + $"{{ var result = {type.crocs_name} | {otherType.crocs_name}; Assert.IsType<{resultType.crocs_name}>(result); Assert.Equal<{resultType.crocs_name}>(1, result); }}\n";
+                }
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryOrTest()
         {{
             {varTypeOneValueDefinitions}
             {inner.Trim()}
