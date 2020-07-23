@@ -46,9 +46,8 @@ namespace crocs_sim
             {
                 var narrowTypeName = type.crocs_name;
 
-                //TODOLOW don't use decimal types
                 output += $@"
-        public static {narrowTypeName} convert_to_{narrowTypeName}_ort(decimal value)
+        internal static {narrowTypeName} sim_convert_to_{narrowTypeName}_ort(decimal value)
         {{
             if (value > {narrowTypeName}.MAX || value < {narrowTypeName}.MIN)
             {{
@@ -57,11 +56,41 @@ namespace crocs_sim
             return ({type.GetBackingTypeName()})value;
         }}
 
-        public static {type.crocs_name} truncate_to_{narrowTypeName}(decimal value)
+        public static {type.crocs_name} sim_truncate_to_{type.crocs_name}(decimal value)
+        {{
+            //converting from decimal to type will thow regardless of unchecked if type too small to hold value
+            if (value < 0)
+            {{
+                return unchecked(({type.GetBackingTypeName()})(long)value);
+            }}
+            else
+            {{
+                return unchecked(({type.GetBackingTypeName()})(ulong)value);
+            }}
+        }}
+";
+                foreach (var otherType in types)
+                {
+                    if (otherType.width < type.width) { continue; }
+                    if (type.CanContain(otherType)) { continue; }
+
+                    //TODOLOW don't use decimal types
+                    output += $@"
+        //public static {narrowTypeName} convert_to_{narrowTypeName}_ort({otherType.crocs_name} value)
+        //{{
+        //    if (value > {narrowTypeName}.MAX || value < {narrowTypeName}.MIN)
+        //    {{
+        //        throw new System.OverflowException(""value "" + value + "" too large for {narrowTypeName}"");
+        //    }}
+        //    return ({type.GetBackingTypeName()})value;
+        //}}
+
+        public static {type.crocs_name} truncate_to_{narrowTypeName}({otherType.crocs_name} value)
         {{
             return unchecked(({type.GetBackingTypeName()})value);
         }}
 ";
+                }
             }
 
             foreach (var type in types)
@@ -81,7 +110,7 @@ namespace crocs_sim
                 //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
                 throw new System.OverflowException($""can't shift '{{shift_amount}}' by more than width of integer '{type.width}'"");
             }}
-            return truncate_to_{type.crocs_name}(value >> Numerics.convert_to_i32_ort(shift_amount));
+            return unchecked(({type.GetBackingTypeName()})(value >> Numerics.sim_convert_to_i32_ort(shift_amount)));
         }}
 
         //note will not throw if high bits truncated. Only throws for invalid shift amounts.
@@ -93,7 +122,7 @@ namespace crocs_sim
                 //https://stackoverflow.com/questions/18918256/is-right-shift-undefined-behavior-if-the-count-is-larger-than-the-width-of-the-t
                 throw new System.OverflowException($""can't shift '{{shift_amount}}' by more than width of integer '{type.width}'"");
             }}
-            return truncate_to_{type.crocs_name}(value << Numerics.convert_to_i32_ort(shift_amount));
+            return unchecked(({type.GetBackingTypeName()})(value << Numerics.sim_convert_to_i32_ort(shift_amount)));
         }}
 ";
             }
@@ -127,7 +156,7 @@ namespace crocs_sim
                 var narrowTypeName = narrowTypeInfo.crocs_name;
 
                 //TODOLOW don't use decimal types
-                narrowingConversions += $"        public {narrowTypeName} as_{narrowTypeName}_ort => Numerics.convert_to_{narrowTypeName}_ort(_value);\n";
+                narrowingConversions += $"        public {narrowTypeName} as_{narrowTypeName}_ort => Numerics.sim_convert_to_{narrowTypeName}_ort(_value);\n";
 
                 wrappingConversions += $"        public {narrowTypeName} wrap_to_{narrowTypeName} => Numerics.truncate_to_{narrowTypeName}(_value);\n";
             }
@@ -360,7 +389,7 @@ namespace crocs.lang
             {
                 bTypeName = bCrocsType.crocs_name;
             }
-            return $"        public static {resultType.crocs_name} operator {op}({aCrocsType.crocs_name} a, {bTypeName} b) => Numerics.convert_to_{resultType.crocs_name}_ort(({aBackingType})a {op} ({bBackingType}){otherValueGetter});\n";
+            return $"        public static {resultType.crocs_name} operator {op}({aCrocsType.crocs_name} a, {bTypeName} b) => Numerics.sim_convert_to_{resultType.crocs_name}_ort(({aBackingType})a {op} ({bBackingType}){otherValueGetter});\n";
         }
 
         private static string GenComparisonOperator(TypeInfo classType, string op)

@@ -52,9 +52,9 @@ namespace crocs.lang
         public static implicit operator i64(u16 num) { return num._value; }
 
         //narrowing conversions
-        public i16 as_i16_ort => Numerics.convert_to_i16_ort(_value);
-        public i8 as_i8_ort => Numerics.convert_to_i8_ort(_value);
-        public u8 as_u8_ort => Numerics.convert_to_u8_ort(_value);
+        public i16 as_i16_ort => Numerics.sim_convert_to_i16_ort(_value);
+        public i8 as_i8_ort => Numerics.sim_convert_to_i8_ort(_value);
+        public u8 as_u8_ort => Numerics.sim_convert_to_u8_ort(_value);
 
         //wrapping conversions
         public i16 wrap_to_i16 => Numerics.truncate_to_i16(_value);
@@ -69,31 +69,31 @@ namespace crocs.lang
         //<= and >= operators
 
         //overflowing operators
-        public static u16 operator +(u16 a, u16 b) => Numerics.convert_to_u16_ort((ushort)a + (ushort)b);
-        public static i32 operator +(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((ushort)a + (sbyte)(i8)b);
-        public static i32 operator +(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((ushort)a + (short)(i16)b);
-        public static u32 operator +(u16 a, u32 b) => Numerics.convert_to_u32_ort((ushort)a + (uint)b);
-        public static u64 operator +(u16 a, u64 b) => Numerics.convert_to_u64_ort((ushort)a + (ulong)b);
-        public static u16 operator -(u16 a, u16 b) => Numerics.convert_to_u16_ort((ushort)a - (ushort)b);
-        public static i32 operator -(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((ushort)a - (sbyte)(i8)b);
-        public static i32 operator -(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((ushort)a - (short)(i16)b);
-        public static u32 operator -(u16 a, u32 b) => Numerics.convert_to_u32_ort((ushort)a - (uint)b);
-        public static u64 operator -(u16 a, u64 b) => Numerics.convert_to_u64_ort((ushort)a - (ulong)b);
-        public static u16 operator *(u16 a, u16 b) => Numerics.convert_to_u16_ort((ushort)a * (ushort)b);
-        public static i32 operator *(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((ushort)a * (sbyte)(i8)b);
-        public static i32 operator *(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((ushort)a * (short)(i16)b);
-        public static u32 operator *(u16 a, u32 b) => Numerics.convert_to_u32_ort((ushort)a * (uint)b);
-        public static u64 operator *(u16 a, u64 b) => Numerics.convert_to_u64_ort((ushort)a * (ulong)b);
-        public static u16 operator /(u16 a, u16 b) => Numerics.convert_to_u16_ort((ushort)a / (ushort)b);
-        public static i32 operator /(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((ushort)a / (sbyte)(i8)b);
-        public static i32 operator /(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((ushort)a / (short)(i16)b);
-        public static u32 operator /(u16 a, u32 b) => Numerics.convert_to_u32_ort((ushort)a / (uint)b);
-        public static u64 operator /(u16 a, u64 b) => Numerics.convert_to_u64_ort((ushort)a / (ulong)b);
-        public static u16 operator %(u16 a, u16 b) => Numerics.convert_to_u16_ort((ushort)a % (ushort)b);
-        public static i32 operator %(u16 a, IHasI8 b) => Numerics.convert_to_i32_ort((ushort)a % (sbyte)(i8)b);
-        public static i32 operator %(u16 a, IHasI16 b) => Numerics.convert_to_i32_ort((ushort)a % (short)(i16)b);
-        public static u32 operator %(u16 a, u32 b) => Numerics.convert_to_u32_ort((ushort)a % (uint)b);
-        public static u64 operator %(u16 a, u64 b) => Numerics.convert_to_u64_ort((ushort)a % (ulong)b);
+        public static u16 operator +(u16 a, u16 b) => Numerics.sim_convert_to_u16_ort((ushort)a + (ushort)b);
+        public static i32 operator +(u16 a, IHasI8 b) => Numerics.sim_convert_to_i32_ort((ushort)a + (sbyte)(i8)b);
+        public static i32 operator +(u16 a, IHasI16 b) => Numerics.sim_convert_to_i32_ort((ushort)a + (short)(i16)b);
+        public static u32 operator +(u16 a, u32 b) => Numerics.sim_convert_to_u32_ort((ushort)a + (uint)b);
+        public static u64 operator +(u16 a, u64 b) => Numerics.sim_convert_to_u64_ort((ushort)a + (ulong)b);
+        public static u16 operator -(u16 a, u16 b) => Numerics.sim_convert_to_u16_ort((ushort)a - (ushort)b);
+        public static i32 operator -(u16 a, IHasI8 b) => Numerics.sim_convert_to_i32_ort((ushort)a - (sbyte)(i8)b);
+        public static i32 operator -(u16 a, IHasI16 b) => Numerics.sim_convert_to_i32_ort((ushort)a - (short)(i16)b);
+        public static u32 operator -(u16 a, u32 b) => Numerics.sim_convert_to_u32_ort((ushort)a - (uint)b);
+        public static u64 operator -(u16 a, u64 b) => Numerics.sim_convert_to_u64_ort((ushort)a - (ulong)b);
+        public static u16 operator *(u16 a, u16 b) => Numerics.sim_convert_to_u16_ort((ushort)a * (ushort)b);
+        public static i32 operator *(u16 a, IHasI8 b) => Numerics.sim_convert_to_i32_ort((ushort)a * (sbyte)(i8)b);
+        public static i32 operator *(u16 a, IHasI16 b) => Numerics.sim_convert_to_i32_ort((ushort)a * (short)(i16)b);
+        public static u32 operator *(u16 a, u32 b) => Numerics.sim_convert_to_u32_ort((ushort)a * (uint)b);
+        public static u64 operator *(u16 a, u64 b) => Numerics.sim_convert_to_u64_ort((ushort)a * (ulong)b);
+        public static u16 operator /(u16 a, u16 b) => Numerics.sim_convert_to_u16_ort((ushort)a / (ushort)b);
+        public static i32 operator /(u16 a, IHasI8 b) => Numerics.sim_convert_to_i32_ort((ushort)a / (sbyte)(i8)b);
+        public static i32 operator /(u16 a, IHasI16 b) => Numerics.sim_convert_to_i32_ort((ushort)a / (short)(i16)b);
+        public static u32 operator /(u16 a, u32 b) => Numerics.sim_convert_to_u32_ort((ushort)a / (uint)b);
+        public static u64 operator /(u16 a, u64 b) => Numerics.sim_convert_to_u64_ort((ushort)a / (ulong)b);
+        public static u16 operator %(u16 a, u16 b) => Numerics.sim_convert_to_u16_ort((ushort)a % (ushort)b);
+        public static i32 operator %(u16 a, IHasI8 b) => Numerics.sim_convert_to_i32_ort((ushort)a % (sbyte)(i8)b);
+        public static i32 operator %(u16 a, IHasI16 b) => Numerics.sim_convert_to_i32_ort((ushort)a % (short)(i16)b);
+        public static u32 operator %(u16 a, u32 b) => Numerics.sim_convert_to_u32_ort((ushort)a % (uint)b);
+        public static u64 operator %(u16 a, u64 b) => Numerics.sim_convert_to_u64_ort((ushort)a % (ulong)b);
         //TODO add more operators
 
         //binary operators (only for unsigned)

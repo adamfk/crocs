@@ -46,13 +46,13 @@ namespace crocs.lang
         
 
         //narrowing conversions
-        public u64 as_u64_ort => Numerics.convert_to_u64_ort(_value);
-        public i32 as_i32_ort => Numerics.convert_to_i32_ort(_value);
-        public u32 as_u32_ort => Numerics.convert_to_u32_ort(_value);
-        public i16 as_i16_ort => Numerics.convert_to_i16_ort(_value);
-        public u16 as_u16_ort => Numerics.convert_to_u16_ort(_value);
-        public i8 as_i8_ort => Numerics.convert_to_i8_ort(_value);
-        public u8 as_u8_ort => Numerics.convert_to_u8_ort(_value);
+        public u64 as_u64_ort => Numerics.sim_convert_to_u64_ort(_value);
+        public i32 as_i32_ort => Numerics.sim_convert_to_i32_ort(_value);
+        public u32 as_u32_ort => Numerics.sim_convert_to_u32_ort(_value);
+        public i16 as_i16_ort => Numerics.sim_convert_to_i16_ort(_value);
+        public u16 as_u16_ort => Numerics.sim_convert_to_u16_ort(_value);
+        public i8 as_i8_ort => Numerics.sim_convert_to_i8_ort(_value);
+        public u8 as_u8_ort => Numerics.sim_convert_to_u8_ort(_value);
 
         //wrapping conversions
         public u64 wrap_to_u64 => Numerics.truncate_to_u64(_value);
@@ -71,11 +71,11 @@ namespace crocs.lang
         //<= and >= operators
 
         //overflowing operators
-        public static i64 operator +(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a + (long)b);
-        public static i64 operator -(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a - (long)b);
-        public static i64 operator *(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a * (long)b);
-        public static i64 operator /(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a / (long)b);
-        public static i64 operator %(i64 a, i64 b) => Numerics.convert_to_i64_ort((long)a % (long)b);
+        public static i64 operator +(i64 a, i64 b) => Numerics.sim_convert_to_i64_ort((long)a + (long)b);
+        public static i64 operator -(i64 a, i64 b) => Numerics.sim_convert_to_i64_ort((long)a - (long)b);
+        public static i64 operator *(i64 a, i64 b) => Numerics.sim_convert_to_i64_ort((long)a * (long)b);
+        public static i64 operator /(i64 a, i64 b) => Numerics.sim_convert_to_i64_ort((long)a / (long)b);
+        public static i64 operator %(i64 a, i64 b) => Numerics.sim_convert_to_i64_ort((long)a % (long)b);
         //TODO add more operators
 
         //binary operators (only for unsigned)

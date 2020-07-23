@@ -137,7 +137,7 @@ namespace crocs_sim
             int width = Math.Max(this.width, other.width);
             char sign_char;
 
-            if (is_signed ^ other.is_signed)
+            if (DiffersInSignedness(other))
             {
                 sign_char = 'i';
 
@@ -232,6 +232,24 @@ namespace crocs_sim
             }
 
             return canPromote;
+        }
+
+        public bool DiffersInSignedness(TypeInfo other)
+        {
+            return this.is_signed ^ other.is_signed;
+        }
+
+        /// <summary>
+        /// True if this type can contain all the values of the other type.
+        /// Unsigned/signed of same size will be false in both directions as
+        /// signed has lower values and unsigned has higher values.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool CanContain(TypeInfo other)
+        {
+            TypeInfo resultType = GetResultType(other);
+            return resultType.Equals(this);
         }
 
         public bool CanPromoteToOrViceVersa(TypeInfo other)
