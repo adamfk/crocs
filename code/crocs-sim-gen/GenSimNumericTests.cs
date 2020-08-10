@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
@@ -419,6 +419,8 @@ namespace crocs_tests
                     inner += indent + $"{{ bool result = {type.crocs_name} != {otherType.crocs_name}; Assert.False(result); }}\n";
                     inner += indent + $"{{ bool result = {type.crocs_name} == {otherType.GetMaxValue()}; Assert.False(result); }}\n";
                     inner += indent + $"{{ bool result = {type.crocs_name} != {otherType.GetMaxValue()}; Assert.True(result); }}\n";
+                    inner += indent + $"{{ bool result = {otherType.GetMaxValue()} == {type.crocs_name}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {otherType.GetMaxValue()} != {type.crocs_name}; Assert.True(result); }}\n";
                 }
 
                 inner += "\n";
