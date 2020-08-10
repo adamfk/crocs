@@ -51,6 +51,7 @@ namespace crocs_tests
         {GenBinaryXorTests()}
         {GenEqualityTests()}
         {GenLessThanXTests()}
+        {GenGreaterThanXTests()}
     }}
 }}
 ";
@@ -466,6 +467,40 @@ namespace crocs_tests
         //NOTE! AUTO GENERATED
         [Fact]
         public void LessThanXTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner}
+        }}
+";
+            return output;
+        }
+
+        public string GenGreaterThanXTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    inner += indent + $"{{ bool result = {type.crocs_name} >= {otherType.crocs_name}; Assert.True(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} > {otherType.crocs_name}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} >= {otherType.GetMaxValue()}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} > {otherType.GetMaxValue()}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {otherType.GetMaxValue()} >= {type.crocs_name}; Assert.True(result); }}\n";
+                    inner += indent + $"{{ bool result = {otherType.GetMaxValue()} > {type.crocs_name}; Assert.True(result); }}\n";
+                }
+
+                inner += "\n";
+            }
+            inner = inner.Trim();
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void GreaterThanXTest()
         {{
             {varTypeOneValueDefinitions}
             {inner}
