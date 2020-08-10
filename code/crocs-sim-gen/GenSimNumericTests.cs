@@ -52,6 +52,8 @@ namespace crocs_tests
         {GenEqualityTests()}
         {GenLessThanXTests()}
         {GenGreaterThanXTests()}
+        {GenBinaryInversionTests()}
+
     }}
 }}
 ";
@@ -59,7 +61,6 @@ namespace crocs_tests
             //
             //{ GenBinaryShiftLeftTests()}
             //{ GenBinaryShiftRightTests()}
-            //{ GenBinaryInversionTests()}
 
             File.WriteAllText(dir_path + "AllNumericTests.cs", output);
         }
@@ -508,6 +509,31 @@ namespace crocs_tests
 ";
             return output;
         }
+
+        public string GenBinaryInversionTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                if (type.is_signed) continue;
+                var varName = type.crocs_name;
+                var typeName = type.crocs_name;
+                //{ u8 u8 = 0; u8 = ~u8; Assert.Equal<u8>(u8, u8.MAX); }
+                inner += indent + $"{{ {typeName} {varName} = 0; {varName} = ~{varName};  Assert.Equal<{type.crocs_name}>({type.GetMaxValue()}, {varName}); }}\n";
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryInversionTest()
+        {{
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
 
         static IEnumerable<string> ChunksUpto(string str, int maxChunkSize)
         {

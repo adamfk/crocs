@@ -86,7 +86,7 @@ namespace crocs.lang
         public static u64 operator ^(u64 a, u64 b) => (u64)((ulong)a ^ (ulong)b);
         public u64 shift_left_ort(u32 shift_amount) => Numerics.shift_left_ort(this, shift_amount);
         public u64 shift_right_ort(u32 shift_amount) => Numerics.shift_right_ort(this, shift_amount);
-        public static u64 operator ~(u64 a) => (u64)(~(ulong)a);
+        public static u64 operator ~(u64 a) => unchecked((u64)(~a._value));
 
         public override string ToString() => _value.ToString();
 

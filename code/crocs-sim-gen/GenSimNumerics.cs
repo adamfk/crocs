@@ -301,7 +301,6 @@ namespace crocs.lang
         private static string GenBinaryInversion(TypeInfo type)
         {
             var output = "";
-            var operators = new string[] { "~" };
 
             //only for unsigned
             if (type.is_signed)
@@ -309,10 +308,7 @@ namespace crocs.lang
                 return output;
             }
 
-            foreach (var op in operators)
-            {
-                output += $"        public static {type.crocs_name} operator {op}({type.crocs_name} a) => ({type.crocs_name})(~({type.GetBackingTypeName()})a);\n";
-            }
+            output += $"        public static {type.crocs_name} operator ~({type.crocs_name} a) => unchecked(({type.crocs_name})(~a._value));\n";
             return output;
         }
 

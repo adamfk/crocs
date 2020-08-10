@@ -2238,5 +2238,15 @@ namespace crocs_tests
             { bool result = 18446744073709551615 > u64; Assert.True(result); }
         }
 
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void BinaryInversionTest()
+        {
+            { u8 u8 = 0; u8 = ~u8;  Assert.Equal<u8>(255, u8); }
+            { u16 u16 = 0; u16 = ~u16;  Assert.Equal<u16>(65535, u16); }
+            { u32 u32 = 0; u32 = ~u32;  Assert.Equal<u32>(4294967295, u32); }
+            { u64 u64 = 0; u64 = ~u64;  Assert.Equal<u64>(18446744073709551615, u64); }
+        }
+
     }
 }
