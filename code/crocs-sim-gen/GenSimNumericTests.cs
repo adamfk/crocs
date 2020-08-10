@@ -34,6 +34,7 @@ namespace crocs_sim
 
 using crocs.lang;
 using Xunit;
+using System;   //for System.OverflowException;
 
 namespace crocs_tests
 {{
@@ -53,7 +54,7 @@ namespace crocs_tests
         {GenLessThanXTests()}
         {GenGreaterThanXTests()}
         {GenBinaryInversionTests()}
-
+        {GenIncDecOperatorTests()}
     }}
 }}
 ";
@@ -519,13 +520,41 @@ namespace crocs_tests
                 var varName = type.crocs_name;
                 var typeName = type.crocs_name;
                 //{ u8 u8 = 0; u8 = ~u8; Assert.Equal<u8>(u8, u8.MAX); }
-                inner += indent + $"{{ {typeName} {varName} = 0; {varName} = ~{varName};  Assert.Equal<{type.crocs_name}>({type.GetMaxValue()}, {varName}); }}\n";
+                inner += indent + $"{{ {typeName} b = 0; b = ~b;  Assert.Equal<{type.crocs_name}>({type.GetMaxValue()}, b); }}\n";
             }
 
             var output = $@"
         //NOTE! AUTO GENERATED
         [Fact]
         public void BinaryInversionTest()
+        {{
+            {inner.Trim()}
+        }}
+        ";
+
+            return output.Trim();
+        }
+
+        public string GenIncDecOperatorTests()
+        {
+            //TODO do overflowing/underflowing
+
+            var inner = "";
+            foreach (var type in types)
+            {
+                if (type.is_signed) continue;
+                var varName = type.crocs_name;
+                var typeName = type.crocs_name;
+                //{ u8 u8 = 0; u8++; Assert.Equal<u8>(u8, 1); u8--; Assert.Equal<u8>(u8, 0); }
+                inner += indent + $"{{ {typeName} {varName} = 0; {varName}++;  Assert.Equal<{type.crocs_name}>(1, {varName});  {varName}--;  Assert.Equal<{type.crocs_name}>(0, {varName}); }}\n";
+                inner += indent + $"Assert.Throws<OverflowException>(() => {{ {typeName} b = {type.GetMaxValue()}; b++; }});\n";
+                inner += indent + $"Assert.Throws<OverflowException>(() => {{ {typeName} b = {type.GetMinValue()}; b--; }});\n";
+            }
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void IncDecOperatorTests()
         {{
             {inner.Trim()}
         }}

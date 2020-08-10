@@ -3,6 +3,7 @@
 
 using crocs.lang;
 using Xunit;
+using System;   //for System.OverflowException;
 
 namespace crocs_tests
 {
@@ -2242,11 +2243,27 @@ namespace crocs_tests
         [Fact]
         public void BinaryInversionTest()
         {
-            { u8 u8 = 0; u8 = ~u8;  Assert.Equal<u8>(255, u8); }
-            { u16 u16 = 0; u16 = ~u16;  Assert.Equal<u16>(65535, u16); }
-            { u32 u32 = 0; u32 = ~u32;  Assert.Equal<u32>(4294967295, u32); }
-            { u64 u64 = 0; u64 = ~u64;  Assert.Equal<u64>(18446744073709551615, u64); }
+            { u8 b = 0; b = ~b;  Assert.Equal<u8>(255, b); }
+            { u16 b = 0; b = ~b;  Assert.Equal<u16>(65535, b); }
+            { u32 b = 0; b = ~b;  Assert.Equal<u32>(4294967295, b); }
+            { u64 b = 0; b = ~b;  Assert.Equal<u64>(18446744073709551615, b); }
         }
-
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void IncDecOperatorTests()
+        {
+            { u8 u8 = 0; u8++;  Assert.Equal<u8>(1, u8);  u8--;  Assert.Equal<u8>(0, u8); }
+            Assert.Throws<OverflowException>(() => { u8 b = 255; b++; });
+            Assert.Throws<OverflowException>(() => { u8 b = 0; b--; });
+            { u16 u16 = 0; u16++;  Assert.Equal<u16>(1, u16);  u16--;  Assert.Equal<u16>(0, u16); }
+            Assert.Throws<OverflowException>(() => { u16 b = 65535; b++; });
+            Assert.Throws<OverflowException>(() => { u16 b = 0; b--; });
+            { u32 u32 = 0; u32++;  Assert.Equal<u32>(1, u32);  u32--;  Assert.Equal<u32>(0, u32); }
+            Assert.Throws<OverflowException>(() => { u32 b = 4294967295; b++; });
+            Assert.Throws<OverflowException>(() => { u32 b = 0; b--; });
+            { u64 u64 = 0; u64++;  Assert.Equal<u64>(1, u64);  u64--;  Assert.Equal<u64>(0, u64); }
+            Assert.Throws<OverflowException>(() => { u64 b = 18446744073709551615; b++; });
+            Assert.Throws<OverflowException>(() => { u64 b = 0; b--; });
+        }
     }
 }
