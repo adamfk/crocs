@@ -49,7 +49,7 @@ namespace crocs_tests
         {GenBinaryOrTests()}
         {GenBinaryAndTests()}
         {GenBinaryXorTests()}
-        {GenEqualsTests()}
+        {GenEqualityTests()}
     }}
 }}
 ";
@@ -405,7 +405,7 @@ namespace crocs_tests
             return output;
         }
 
-        public string GenEqualsTests()
+        public string GenEqualityTests()
         {
             var inner = "";
             foreach (var type in types)
