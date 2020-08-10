@@ -1164,5 +1164,251 @@ namespace crocs_tests
             { u64 result = u64 ^ u64; Assert.Equal<u64>(0b0000, result); }
             { var result = u64 ^ u64; Assert.IsType<u64>(result); Assert.Equal<u64>(0, result); }
         }
+        
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void EqualsTest()
+        {
+            i8 i8 = 1;
+            i16 i16 = 1;
+            i32 i32 = 1;
+            i64 i64 = 1;
+            u8 u8 = 1;
+            u16 u16 = 1;
+            u32 u32 = 1;
+            u64 u64 = 1;
+            { bool result = i8 == i8; Assert.True(result); }
+            { bool result = i8 != i8; Assert.False(result); }
+            { bool result = i8 == 127; Assert.False(result); }
+            { bool result = i8 != 127; Assert.True(result); }
+            { bool result = i8 == i16; Assert.True(result); }
+            { bool result = i8 != i16; Assert.False(result); }
+            { bool result = i8 == 32767; Assert.False(result); }
+            { bool result = i8 != 32767; Assert.True(result); }
+            { bool result = i8 == i32; Assert.True(result); }
+            { bool result = i8 != i32; Assert.False(result); }
+            { bool result = i8 == 2147483647; Assert.False(result); }
+            { bool result = i8 != 2147483647; Assert.True(result); }
+            { bool result = i8 == i64; Assert.True(result); }
+            { bool result = i8 != i64; Assert.False(result); }
+            { bool result = i8 == 9223372036854775807; Assert.False(result); }
+            { bool result = i8 != 9223372036854775807; Assert.True(result); }
+            { bool result = i8 == u8; Assert.True(result); }
+            { bool result = i8 != u8; Assert.False(result); }
+            { bool result = i8 == 255; Assert.False(result); }
+            { bool result = i8 != 255; Assert.True(result); }
+            { bool result = i8 == u16; Assert.True(result); }
+            { bool result = i8 != u16; Assert.False(result); }
+            { bool result = i8 == 65535; Assert.False(result); }
+            { bool result = i8 != 65535; Assert.True(result); }
+            { bool result = i8 == u32; Assert.True(result); }
+            { bool result = i8 != u32; Assert.False(result); }
+            { bool result = i8 == 4294967295; Assert.False(result); }
+            { bool result = i8 != 4294967295; Assert.True(result); }
+
+            { bool result = i16 == i8; Assert.True(result); }
+            { bool result = i16 != i8; Assert.False(result); }
+            { bool result = i16 == 127; Assert.False(result); }
+            { bool result = i16 != 127; Assert.True(result); }
+            { bool result = i16 == i16; Assert.True(result); }
+            { bool result = i16 != i16; Assert.False(result); }
+            { bool result = i16 == 32767; Assert.False(result); }
+            { bool result = i16 != 32767; Assert.True(result); }
+            { bool result = i16 == i32; Assert.True(result); }
+            { bool result = i16 != i32; Assert.False(result); }
+            { bool result = i16 == 2147483647; Assert.False(result); }
+            { bool result = i16 != 2147483647; Assert.True(result); }
+            { bool result = i16 == i64; Assert.True(result); }
+            { bool result = i16 != i64; Assert.False(result); }
+            { bool result = i16 == 9223372036854775807; Assert.False(result); }
+            { bool result = i16 != 9223372036854775807; Assert.True(result); }
+            { bool result = i16 == u8; Assert.True(result); }
+            { bool result = i16 != u8; Assert.False(result); }
+            { bool result = i16 == 255; Assert.False(result); }
+            { bool result = i16 != 255; Assert.True(result); }
+            { bool result = i16 == u16; Assert.True(result); }
+            { bool result = i16 != u16; Assert.False(result); }
+            { bool result = i16 == 65535; Assert.False(result); }
+            { bool result = i16 != 65535; Assert.True(result); }
+            { bool result = i16 == u32; Assert.True(result); }
+            { bool result = i16 != u32; Assert.False(result); }
+            { bool result = i16 == 4294967295; Assert.False(result); }
+            { bool result = i16 != 4294967295; Assert.True(result); }
+
+            { bool result = i32 == i8; Assert.True(result); }
+            { bool result = i32 != i8; Assert.False(result); }
+            { bool result = i32 == 127; Assert.False(result); }
+            { bool result = i32 != 127; Assert.True(result); }
+            { bool result = i32 == i16; Assert.True(result); }
+            { bool result = i32 != i16; Assert.False(result); }
+            { bool result = i32 == 32767; Assert.False(result); }
+            { bool result = i32 != 32767; Assert.True(result); }
+            { bool result = i32 == i32; Assert.True(result); }
+            { bool result = i32 != i32; Assert.False(result); }
+            { bool result = i32 == 2147483647; Assert.False(result); }
+            { bool result = i32 != 2147483647; Assert.True(result); }
+            { bool result = i32 == i64; Assert.True(result); }
+            { bool result = i32 != i64; Assert.False(result); }
+            { bool result = i32 == 9223372036854775807; Assert.False(result); }
+            { bool result = i32 != 9223372036854775807; Assert.True(result); }
+            { bool result = i32 == u8; Assert.True(result); }
+            { bool result = i32 != u8; Assert.False(result); }
+            { bool result = i32 == 255; Assert.False(result); }
+            { bool result = i32 != 255; Assert.True(result); }
+            { bool result = i32 == u16; Assert.True(result); }
+            { bool result = i32 != u16; Assert.False(result); }
+            { bool result = i32 == 65535; Assert.False(result); }
+            { bool result = i32 != 65535; Assert.True(result); }
+            { bool result = i32 == u32; Assert.True(result); }
+            { bool result = i32 != u32; Assert.False(result); }
+            { bool result = i32 == 4294967295; Assert.False(result); }
+            { bool result = i32 != 4294967295; Assert.True(result); }
+
+            { bool result = i64 == i8; Assert.True(result); }
+            { bool result = i64 != i8; Assert.False(result); }
+            { bool result = i64 == 127; Assert.False(result); }
+            { bool result = i64 != 127; Assert.True(result); }
+            { bool result = i64 == i16; Assert.True(result); }
+            { bool result = i64 != i16; Assert.False(result); }
+            { bool result = i64 == 32767; Assert.False(result); }
+            { bool result = i64 != 32767; Assert.True(result); }
+            { bool result = i64 == i32; Assert.True(result); }
+            { bool result = i64 != i32; Assert.False(result); }
+            { bool result = i64 == 2147483647; Assert.False(result); }
+            { bool result = i64 != 2147483647; Assert.True(result); }
+            { bool result = i64 == i64; Assert.True(result); }
+            { bool result = i64 != i64; Assert.False(result); }
+            { bool result = i64 == 9223372036854775807; Assert.False(result); }
+            { bool result = i64 != 9223372036854775807; Assert.True(result); }
+            { bool result = i64 == u8; Assert.True(result); }
+            { bool result = i64 != u8; Assert.False(result); }
+            { bool result = i64 == 255; Assert.False(result); }
+            { bool result = i64 != 255; Assert.True(result); }
+            { bool result = i64 == u16; Assert.True(result); }
+            { bool result = i64 != u16; Assert.False(result); }
+            { bool result = i64 == 65535; Assert.False(result); }
+            { bool result = i64 != 65535; Assert.True(result); }
+            { bool result = i64 == u32; Assert.True(result); }
+            { bool result = i64 != u32; Assert.False(result); }
+            { bool result = i64 == 4294967295; Assert.False(result); }
+            { bool result = i64 != 4294967295; Assert.True(result); }
+
+            { bool result = u8 == i8; Assert.True(result); }
+            { bool result = u8 != i8; Assert.False(result); }
+            { bool result = u8 == 127; Assert.False(result); }
+            { bool result = u8 != 127; Assert.True(result); }
+            { bool result = u8 == i16; Assert.True(result); }
+            { bool result = u8 != i16; Assert.False(result); }
+            { bool result = u8 == 32767; Assert.False(result); }
+            { bool result = u8 != 32767; Assert.True(result); }
+            { bool result = u8 == i32; Assert.True(result); }
+            { bool result = u8 != i32; Assert.False(result); }
+            { bool result = u8 == 2147483647; Assert.False(result); }
+            { bool result = u8 != 2147483647; Assert.True(result); }
+            { bool result = u8 == i64; Assert.True(result); }
+            { bool result = u8 != i64; Assert.False(result); }
+            { bool result = u8 == 9223372036854775807; Assert.False(result); }
+            { bool result = u8 != 9223372036854775807; Assert.True(result); }
+            { bool result = u8 == u8; Assert.True(result); }
+            { bool result = u8 != u8; Assert.False(result); }
+            { bool result = u8 == 255; Assert.False(result); }
+            { bool result = u8 != 255; Assert.True(result); }
+            { bool result = u8 == u16; Assert.True(result); }
+            { bool result = u8 != u16; Assert.False(result); }
+            { bool result = u8 == 65535; Assert.False(result); }
+            { bool result = u8 != 65535; Assert.True(result); }
+            { bool result = u8 == u32; Assert.True(result); }
+            { bool result = u8 != u32; Assert.False(result); }
+            { bool result = u8 == 4294967295; Assert.False(result); }
+            { bool result = u8 != 4294967295; Assert.True(result); }
+            { bool result = u8 == u64; Assert.True(result); }
+            { bool result = u8 != u64; Assert.False(result); }
+            { bool result = u8 == 18446744073709551615; Assert.False(result); }
+            { bool result = u8 != 18446744073709551615; Assert.True(result); }
+
+            { bool result = u16 == i8; Assert.True(result); }
+            { bool result = u16 != i8; Assert.False(result); }
+            { bool result = u16 == 127; Assert.False(result); }
+            { bool result = u16 != 127; Assert.True(result); }
+            { bool result = u16 == i16; Assert.True(result); }
+            { bool result = u16 != i16; Assert.False(result); }
+            { bool result = u16 == 32767; Assert.False(result); }
+            { bool result = u16 != 32767; Assert.True(result); }
+            { bool result = u16 == i32; Assert.True(result); }
+            { bool result = u16 != i32; Assert.False(result); }
+            { bool result = u16 == 2147483647; Assert.False(result); }
+            { bool result = u16 != 2147483647; Assert.True(result); }
+            { bool result = u16 == i64; Assert.True(result); }
+            { bool result = u16 != i64; Assert.False(result); }
+            { bool result = u16 == 9223372036854775807; Assert.False(result); }
+            { bool result = u16 != 9223372036854775807; Assert.True(result); }
+            { bool result = u16 == u8; Assert.True(result); }
+            { bool result = u16 != u8; Assert.False(result); }
+            { bool result = u16 == 255; Assert.False(result); }
+            { bool result = u16 != 255; Assert.True(result); }
+            { bool result = u16 == u16; Assert.True(result); }
+            { bool result = u16 != u16; Assert.False(result); }
+            { bool result = u16 == 65535; Assert.False(result); }
+            { bool result = u16 != 65535; Assert.True(result); }
+            { bool result = u16 == u32; Assert.True(result); }
+            { bool result = u16 != u32; Assert.False(result); }
+            { bool result = u16 == 4294967295; Assert.False(result); }
+            { bool result = u16 != 4294967295; Assert.True(result); }
+            { bool result = u16 == u64; Assert.True(result); }
+            { bool result = u16 != u64; Assert.False(result); }
+            { bool result = u16 == 18446744073709551615; Assert.False(result); }
+            { bool result = u16 != 18446744073709551615; Assert.True(result); }
+
+            { bool result = u32 == i8; Assert.True(result); }
+            { bool result = u32 != i8; Assert.False(result); }
+            { bool result = u32 == 127; Assert.False(result); }
+            { bool result = u32 != 127; Assert.True(result); }
+            { bool result = u32 == i16; Assert.True(result); }
+            { bool result = u32 != i16; Assert.False(result); }
+            { bool result = u32 == 32767; Assert.False(result); }
+            { bool result = u32 != 32767; Assert.True(result); }
+            { bool result = u32 == i32; Assert.True(result); }
+            { bool result = u32 != i32; Assert.False(result); }
+            { bool result = u32 == 2147483647; Assert.False(result); }
+            { bool result = u32 != 2147483647; Assert.True(result); }
+            { bool result = u32 == i64; Assert.True(result); }
+            { bool result = u32 != i64; Assert.False(result); }
+            { bool result = u32 == 9223372036854775807; Assert.False(result); }
+            { bool result = u32 != 9223372036854775807; Assert.True(result); }
+            { bool result = u32 == u8; Assert.True(result); }
+            { bool result = u32 != u8; Assert.False(result); }
+            { bool result = u32 == 255; Assert.False(result); }
+            { bool result = u32 != 255; Assert.True(result); }
+            { bool result = u32 == u16; Assert.True(result); }
+            { bool result = u32 != u16; Assert.False(result); }
+            { bool result = u32 == 65535; Assert.False(result); }
+            { bool result = u32 != 65535; Assert.True(result); }
+            { bool result = u32 == u32; Assert.True(result); }
+            { bool result = u32 != u32; Assert.False(result); }
+            { bool result = u32 == 4294967295; Assert.False(result); }
+            { bool result = u32 != 4294967295; Assert.True(result); }
+            { bool result = u32 == u64; Assert.True(result); }
+            { bool result = u32 != u64; Assert.False(result); }
+            { bool result = u32 == 18446744073709551615; Assert.False(result); }
+            { bool result = u32 != 18446744073709551615; Assert.True(result); }
+
+            { bool result = u64 == u8; Assert.True(result); }
+            { bool result = u64 != u8; Assert.False(result); }
+            { bool result = u64 == 255; Assert.False(result); }
+            { bool result = u64 != 255; Assert.True(result); }
+            { bool result = u64 == u16; Assert.True(result); }
+            { bool result = u64 != u16; Assert.False(result); }
+            { bool result = u64 == 65535; Assert.False(result); }
+            { bool result = u64 != 65535; Assert.True(result); }
+            { bool result = u64 == u32; Assert.True(result); }
+            { bool result = u64 != u32; Assert.False(result); }
+            { bool result = u64 == 4294967295; Assert.False(result); }
+            { bool result = u64 != 4294967295; Assert.True(result); }
+            { bool result = u64 == u64; Assert.True(result); }
+            { bool result = u64 != u64; Assert.False(result); }
+            { bool result = u64 == 18446744073709551615; Assert.False(result); }
+            { bool result = u64 != 18446744073709551615; Assert.True(result); }
+        }
+
     }
 }

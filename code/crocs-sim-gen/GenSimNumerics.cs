@@ -217,9 +217,11 @@ namespace crocs.lang
         //comparison operators
         { GenComparisonOperator(typeInfo, "==") }
         { GenComparisonOperator(typeInfo, "!=") }
-        //rest of comparisons automatically done via implicit conversions to c# integer types
-        //< and > operators
-        //<= and >= operators
+        { GenComparisonOperator(typeInfo, "<") }
+        { GenComparisonOperator(typeInfo, ">") }
+        { GenComparisonOperator(typeInfo, "<=") }
+        { GenComparisonOperator(typeInfo, ">=") }
+
 
         //overflowing operators
         { GenOverflowingOperators(typeInfo).Trim() }

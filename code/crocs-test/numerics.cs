@@ -821,6 +821,8 @@ namespace numerics_test
             { short a = 34; short b = 12; var c = a | b; Assert.IsType<int>(c); }
 
             { i16 a = 34; i16 b = 12; var c = a - b; Assert.IsType<i16>(c); Assert.Equal<i16>(22, c); }
+            
+            { i16 a = 34; u8 b = 12; bool c = a == b; Assert.False(c); }
         }
 
         [Fact]

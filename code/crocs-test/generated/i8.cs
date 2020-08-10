@@ -58,9 +58,11 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(i8 a, i8 b) => (sbyte)a == (sbyte)b;
         public static bool operator !=(i8 a, i8 b) => (sbyte)a != (sbyte)b;
-        //rest of comparisons automatically done via implicit conversions to c# integer types
-        //< and > operators
-        //<= and >= operators
+        public static bool operator <(i8 a, i8 b) => (sbyte)a < (sbyte)b;
+        public static bool operator >(i8 a, i8 b) => (sbyte)a > (sbyte)b;
+        public static bool operator <=(i8 a, i8 b) => (sbyte)a <= (sbyte)b;
+        public static bool operator >=(i8 a, i8 b) => (sbyte)a >= (sbyte)b;
+
 
         //overflowing operators
         public static i8 operator +(i8 a, i8 b) => Numerics.sim_convert_to_i8_ort((sbyte)a + (sbyte)b);

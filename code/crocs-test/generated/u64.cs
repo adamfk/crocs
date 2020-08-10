@@ -66,9 +66,11 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(u64 a, u64 b) => (ulong)a == (ulong)b;
         public static bool operator !=(u64 a, u64 b) => (ulong)a != (ulong)b;
-        //rest of comparisons automatically done via implicit conversions to c# integer types
-        //< and > operators
-        //<= and >= operators
+        public static bool operator <(u64 a, u64 b) => (ulong)a < (ulong)b;
+        public static bool operator >(u64 a, u64 b) => (ulong)a > (ulong)b;
+        public static bool operator <=(u64 a, u64 b) => (ulong)a <= (ulong)b;
+        public static bool operator >=(u64 a, u64 b) => (ulong)a >= (ulong)b;
+
 
         //overflowing operators
         public static u64 operator +(u64 a, u64 b) => Numerics.sim_convert_to_u64_ort((ulong)a + (ulong)b);

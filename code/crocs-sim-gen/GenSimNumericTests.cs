@@ -48,7 +48,8 @@ namespace crocs_tests
         {GenModulusTests()}
         {GenBinaryOrTests()}
         {GenBinaryAndTests()}
-        { GenBinaryXorTests()}
+        {GenBinaryXorTests()}
+        {GenEqualsTests()}
     }}
 }}
 ";
@@ -399,6 +400,38 @@ namespace crocs_tests
         {{
             {varTypeOneValueDefinitions}
             {implicitTestInner}
+        }}
+";
+            return output;
+        }
+
+        public string GenEqualsTests()
+        {
+            var inner = "";
+            foreach (var type in types)
+            {
+                foreach (var otherType in types)
+                {
+                    var resultType = type.GetResultType(otherType);
+                    if (resultType.width > 64) continue;
+
+                    inner += indent + $"{{ bool result = {type.crocs_name} == {otherType.crocs_name}; Assert.True(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} != {otherType.crocs_name}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} == {otherType.GetMaxValue()}; Assert.False(result); }}\n";
+                    inner += indent + $"{{ bool result = {type.crocs_name} != {otherType.GetMaxValue()}; Assert.True(result); }}\n";
+                }
+
+                inner += "\n";
+            }
+            inner = inner.Trim();
+
+            var output = $@"
+        //NOTE! AUTO GENERATED
+        [Fact]
+        public void EqualsTest()
+        {{
+            {varTypeOneValueDefinitions}
+            {inner}
         }}
 ";
             return output;

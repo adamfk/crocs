@@ -64,9 +64,11 @@ namespace crocs.lang
         //comparison operators
         public static bool operator ==(u32 a, u32 b) => (uint)a == (uint)b;
         public static bool operator !=(u32 a, u32 b) => (uint)a != (uint)b;
-        //rest of comparisons automatically done via implicit conversions to c# integer types
-        //< and > operators
-        //<= and >= operators
+        public static bool operator <(u32 a, u32 b) => (uint)a < (uint)b;
+        public static bool operator >(u32 a, u32 b) => (uint)a > (uint)b;
+        public static bool operator <=(u32 a, u32 b) => (uint)a <= (uint)b;
+        public static bool operator >=(u32 a, u32 b) => (uint)a >= (uint)b;
+
 
         //overflowing operators
         public static u32 operator +(u32 a, u32 b) => Numerics.sim_convert_to_u32_ort((uint)a + (uint)b);
